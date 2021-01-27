@@ -25,14 +25,7 @@ namespace ComediaTest
     [TestFixture]
     public class LineRespositoryTestWithSqliteSessionFactory
     {
-        bool CloseTo(float x, float x0)
-        {
-            if (Math.Abs(x - x0) < 0.00001)
-            {
-                return true;
-            }
-            else return false;
-        }
+        
         InMemorySqLiteSessionFactory sqliteSessionFactory;
 
         [SetUp]
@@ -47,7 +40,7 @@ namespace ComediaTest
         }
 
         [Test]
-        public void createRoll_byDefault_shouldCreate()
+        public void createLine_byDefault_shouldCreate()
         {
             Line f = new Line
             {

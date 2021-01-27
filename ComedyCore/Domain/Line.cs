@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ComediaCore.Domain
 {
-    public class Line
+    public class Line : IEntity
     {
         public virtual int Id
         {
@@ -25,6 +25,12 @@ namespace ComediaCore.Domain
             get;
             set;
         }
+
+        public virtual Canto Canto {
+            get;
+            set;
+        }
+
         public override string ToString()
         {
             return Text;

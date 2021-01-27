@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormComedia", "FormComedia.csproj", "{71499E13-4EA3-415B-9E72-00DF3031D9A1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BE7F4A49-336E-43FA-AEE8-3855DFAE1CCD} = {BE7F4A49-336E-43FA-AEE8-3855DFAE1CCD}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComediaCore", "..\ComedyCore\ComediaCore.csproj", "{BE7F4A49-336E-43FA-AEE8-3855DFAE1CCD}"
 EndProject

@@ -8,17 +8,20 @@ using System.Threading.Tasks;
 
 namespace ComediaCore.Mapping
 {
-    
-    public class LineMap : ClassMap<Line>
+   
+    public class CantoMap : ClassMap<Canto>
     {
-        public LineMap()
+        public CantoMap()
         {
             Id(x => x.Id);
 
             Map(x => x.Number);
-            Map(x => x.Text);
 
-            References(x => x.Canto);
+            HasMany(x => x.Lines)
+                .Inverse()
+                .Cascade.AllDeleteOrphan();
+
+            References(x => x.Book);
         }
     }
 }

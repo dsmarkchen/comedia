@@ -2,18 +2,26 @@
 using NHibernate;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
+using System.IO;
+using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace FormComedia
 {
     public partial class Form1 : Form
     {
+        private static string AssemblyDirectory
+        {
+            get
+            {
+                string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+                UriBuilder uri = new UriBuilder(codeBase);
+                string path = Uri.UnescapeDataString(uri.Path);
+                return Path.GetDirectoryName(path);
+            }
+        }
         public Form1()
         {
             InitializeComponent();            
@@ -26,81 +34,92 @@ namespace FormComedia
 
         private void addToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DBHelper.Import_line(1, "In the middle of our life");
-            DBHelper.Import_line(2, "I found myself astray to a darkwood");
+            
+            string file = Path.Combine(AssemblyDirectory, "inferno.txt");
+            string purgatorio = Path.Combine(AssemblyDirectory, "purgatorio.txt");
+            string paradiso = Path.Combine(AssemblyDirectory, "paradiso.txt");
+
+            try
+            {
+                var text0 = File.ReadAllText(file);
+                DBHelper.Import_Book("Inferno", 1, text0);
+                var text1 = File.ReadAllText(purgatorio);
+                DBHelper.Import_Book("Purgatorio", 2, text1);
+
+                var text2 = File.ReadAllText(paradiso);
+                DBHelper.Import_Book("Paradiso", 3, text2);
+            }
+            catch (IOException)
+            {
+            }
         }
 
         private void buttonGet_Click(object sender, EventArgs e)
         {
-            var lines = DBHelper.GetAll<Line>();
+            int bookNumber = int.Parse(textBoxBook.Text);
+            int cantoNumber = int.Parse(textBoxCanto.Text);
+            int start = int.Parse(textBoxStart.Text);
+            int end = int.Parse(textBoxEnd.Text);
+            var books = DBHelper.GetAll<Book>();
             textBox1.Text = "";
-            foreach (var line in lines)
+            StringBuilder sb = new StringBuilder();
+            foreach (var book in books)
             {
-                textBox1.Text += line.Text;
-            }
-        }
-    }
+                if (book.Number != bookNumber) continue;
 
-    public class DBHelper {
-
-        private static void CloseSession()
-        {
-            var session2 = xSessionManager.Unbind();
-            if (session2 != null)
-            {
-                if (session2.Transaction.IsActive)
+                foreach (var canto in book.Cantos)
                 {
-                    try
+                    if(canto.Number == cantoNumber)
                     {
-                        session2.Transaction.Commit();
+                        foreach(var line in canto.Lines)
+                        {
+                            if(line.Number >= start && line.Number <= end)
+                            {
+                                if(line.Number % 3 != 1)
+                                {
+                                    sb.Append("    ");
+                                }
+                                sb.AppendLine(line.ToString());
+                                if (line.Number % 3 == 0)
+                                {
+                                    sb.AppendLine("");
+                                }
+                            }
+                        }
                     }
-                    catch
-                    {
-                        session2.Transaction.Rollback();
-                    }
+                    
                 }
-                session2.Close();
             }
-        }
-        public static bool Updatedb()
-        {
-            CloseSession();
-            xSessionManager.UpdateSchema();
-            return true;
-        }
-        public static bool Initdb()
-        {
-            CloseSession();
-            xSessionManager.ExportSchema();
-            return true;
+            textBox1.Text = sb.ToString();
         }
 
-
-        public static void Import_line(int number, string text)
+        private void buttonNext_Click(object sender, EventArgs e)
         {
-            Line run = new Line { };
-            run.Number = number;
-            run.Text = text;
+            int start0 = int.Parse(textBoxStart.Text);
+            int end0 = int.Parse(textBoxEnd.Text);
+            int start = end0 + 1;
+            int len = end0 - start0 + 1;
+            int end = end0 + len;
+            textBoxStart.Text = start.ToString();
+            textBoxEnd.Text = end.ToString();
 
-
-            ISession session1 = xSessionManager.GetCurrentSession();
-
-            using (ITransaction transaction = session1.BeginTransaction())
-            {
-                session1.Save(run);
-
-                transaction.Commit();
-            }
+            buttonGet.PerformClick();
         }
 
-        public static IList<T> GetAll<T>()
+        private void buttonBack_Click(object sender, EventArgs e)
         {
-            ISession session = xSessionManager.GetCurrentSession();
-            var runs = session.CreateCriteria(typeof(T)).List<T>();
-            if (runs.Count > 0)
-                return runs;
+            int start0 = int.Parse(textBoxStart.Text);
+            int end0 = int.Parse(textBoxEnd.Text);
+            
+            int len = end0 - start0 + 1;
+            int end = start0 - 1;
+            int start = start0 - len;
 
-            return null;
+            textBoxStart.Text = start.ToString();
+            textBoxEnd.Text = end.ToString();
+
+            buttonGet.PerformClick();
         }
     }
+
 }

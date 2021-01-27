@@ -41,7 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="BookRepositoryTest.cs" />
+    <Compile Include="CantoRepositoryTest.cs" />
+    <Compile Include="LineRepositoryTest.cs" />
     <Compile Include="InMemorySqlLiteSessionFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
