@@ -3,6 +3,7 @@ using NHibernate;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -79,7 +80,10 @@ namespace FormComedia
                                 {
                                     sb.Append("    ");
                                 }
-                                sb.AppendLine(line.ToString());
+                                string input = line.ToString();
+                                input = input.First().ToString().ToUpper() + String.Join("", input.Skip(1));
+
+                                sb.AppendLine(input);
                                 if (line.Number % 3 == 0)
                                 {
                                     sb.AppendLine("");
@@ -119,6 +123,96 @@ namespace FormComedia
             textBoxEnd.Text = end.ToString();
 
             buttonGet.PerformClick();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            tableLayoutPanel4.Dock = DockStyle.Fill;
+            tableLayoutPanel3.Dock = DockStyle.Fill;
+            tableLayoutPanel2.Dock = DockStyle.Fill;
+            panel2.Dock = DockStyle.Fill;
+            textBox1.Dock = DockStyle.Fill;
+            textBox3.Dock = DockStyle.Fill;
+        }
+
+        private void buildToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // create virgil
+            Character camilla = new Character
+            {
+                Name = "Camilla"
+            };
+            Character nisus = new Character
+            {
+                Name = "Nisus"
+            };
+            Poem m = new Poem
+            {
+                Name = "Aeneid"
+            };
+            m.AddCharacter(camilla);
+            m.AddCharacter(nisus);
+
+            Poet f = new Poet
+            {
+                Name = "Virgil",
+            };
+            f.AddPoem(m);
+            //DBHelper.save<Character>(camilla);
+            DBHelper.save<Poet>(f);
+            DBHelper.save<Character>(camilla);
+            DBHelper.save<Character>(nisus);
+        }
+
+        private void textBox1_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (textBox1.SelectedText.Length > 0)
+                {
+                    var text = textBox1.SelectedText;
+                    text= text.Trim(new char[] { ',', ' ', '.', '"', '-' });
+                    textBoxKey.Text = text;
+                }
+            }
+        }
+
+        private void buttonQuery_Click(object sender, EventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+            var key_word = textBoxKey.Text;
+            var poets = DBHelper.GetAllWithRestrictionsEq<Poet>("Name", key_word);
+            if(poets != null && poets.Count > 0)
+            {   
+                sb.AppendLine("Poet" + " " +  poets[0].Name);
+                if (poets[0].Poems != null &&  poets[0].Poems.Count > 0)
+                {
+                    sb.AppendLine("  Poem " + poets[0].Poems[0].Name);
+                }
+            }
+
+            var poems = DBHelper.GetAllWithRestrictionsEq<Poem>("Name", key_word);
+            if (poems != null && poems.Count > 0)
+            {
+                sb.AppendLine("Poem" + " " + poems[0].Name);
+                sb.AppendLine("  Auther " + poems[0].Author.Name);
+
+            }
+
+            var characters = DBHelper.GetAllWithRestrictionsEq<Character>("Name", key_word);
+            if (characters != null && characters.Count > 0)
+            {
+                sb.AppendLine("Charactor" + " " + characters[0].Name);
+                if (characters[0].Poem != null)
+                {
+                    sb.AppendLine("  Poem " + characters[0].Poem.Name);
+                }
+
+
+            }
+           
+
+            textBox3.Text = sb.ToString();
         }
     }
 

@@ -45,6 +45,7 @@
     <Compile Include="CantoRepositoryTest.cs" />
     <Compile Include="LineRepositoryTest.cs" />
     <Compile Include="InMemorySqlLiteSessionFactory.cs" />
+    <Compile Include="PoetRepositoryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
