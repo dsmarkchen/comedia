@@ -9,13 +9,12 @@ using System.Threading.Tasks;
 namespace ComediaCore.Mapping
 {
 
-    public class CharacterMap : ClassMap<Character>
+    public class CharacterMap : SubclassMap<Character>
     {
         public CharacterMap()
         {
-            Id(x => x.Id);
-
-            Map(x => x.Name);
+            KeyColumn("Person_id");
+            
             Map(x => x.Story);
 
             References(x => x.Poem);
@@ -30,27 +29,24 @@ namespace ComediaCore.Mapping
 
             Map(x => x.Name);
 
-            References(x => x.Author)
-                 .Column("Poet_id")
-                 .Cascade.All();
-
             HasMany(x => x.Characters)
                 .AsSet()
-                .Inverse();                
+                .Inverse()
+                .Cascade.All();
+
+            References(x => x.Author)
+                 .Column("Person_id")
+                 .Cascade.All();
 
         }
     }
 
-    public class PoetMap : ClassMap<Poet>
+    public class PoetMap : SubclassMap<Poet>
     {
         public PoetMap()
-        {
-            Id(x => x.Id);
+        {            
+            KeyColumn("Person_id");
 
-            Map(x => x.Name);
-            Map(x => x.Place);
-
-            
             HasMany(x => x.Poems)                
                 .Inverse()
                 .Cascade.AllDeleteOrphan();

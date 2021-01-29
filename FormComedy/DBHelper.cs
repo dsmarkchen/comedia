@@ -16,7 +16,7 @@ namespace FormComedia
         public static void save<T>(T t)
         {
 
-            ISession session1 = xSessionManager.GetCurrentSession();
+            ISession session1 = SQLiteSessionManager.GetCurrentSession();
 
             using (ITransaction transaction = session1.BeginTransaction())
             {
@@ -27,7 +27,7 @@ namespace FormComedia
         }
         public static IList<T> GetAll<T>()
         {
-            ISession session = xSessionManager.GetCurrentSession();
+            ISession session = SQLiteSessionManager.GetCurrentSession();
             var runs = session.CreateCriteria(typeof(T)).List<T>();
             if (runs.Count > 0)
                 return runs;
@@ -36,7 +36,7 @@ namespace FormComedia
         }
         public static IList<T> GetAllWithRestrictionsLike<T>(string name, string value)
         {
-            ISession session = xSessionManager.GetCurrentSession();
+            ISession session = SQLiteSessionManager.GetCurrentSession();
             var runs = session.CreateCriteria(typeof(T))
                 .Add(Restrictions.Like(name, value, MatchMode.Anywhere))
                 .List<T>();
@@ -47,7 +47,7 @@ namespace FormComedia
         }
         public static IList<T> GetAllWithRestrictionsEq<T>(string name, object value)
         {
-            ISession session = xSessionManager.GetCurrentSession();
+            ISession session = SQLiteSessionManager.GetCurrentSession();
             var runs = session.CreateCriteria(typeof(T))
                 .Add(Restrictions.Eq(name, value))
                 .List<T>();
@@ -56,20 +56,38 @@ namespace FormComedia
 
             return null;
         }
+        public static IList<T> GetAllWithRestrictionsInsentiveLike<T>(string name, object value)
+        {
+            ISession session = SQLiteSessionManager.GetCurrentSession();
+            var runs = session.CreateCriteria(typeof(T))
+                .Add(Restrictions.InsensitiveLike(name, value))
+                .List<T>();
+            if (runs.Count > 0)
+                return runs;
 
+            return null;
+        }
 
         public static IList<T> GetAllWithCriteriaEq<T>(string criteria, string name, object value)
         {
-            ISession session = xSessionManager.GetCurrentSession();
+            ISession session = SQLiteSessionManager.GetCurrentSession();
             return session.CreateCriteria(typeof(T))
                                 .CreateCriteria(criteria)
                                 .Add(Restrictions.Eq(name, value))
                                 .List<T>();
         }
+        public static IList<T> GetAllWithCriteriaInsentiveLike<T>(string criteria, string name, object value)
+        {
+            ISession session = SQLiteSessionManager.GetCurrentSession();
+            return session.CreateCriteria(typeof(T))
+                                .CreateCriteria(criteria)
+                                .Add(Restrictions.InsensitiveLike(name, value))
+                                .List<T>();
+        }
 
         private static void CloseSession()
         {
-            var session2 = xSessionManager.Unbind();
+            var session2 = SQLiteSessionManager.Unbind();
             if (session2 != null)
             {
                 if (session2.Transaction.IsActive)
@@ -89,13 +107,13 @@ namespace FormComedia
         public static bool Updatedb()
         {
             CloseSession();
-            xSessionManager.UpdateSchema();
+            SQLiteSessionManager.UpdateSchema();
             return true;
         }
         public static bool Initdb()
         {
             CloseSession();
-            xSessionManager.ExportSchema();
+            SQLiteSessionManager.ExportSchema();
             return true;
         }
         public static void Import_Book(string name, int number, string text0)
@@ -146,7 +164,7 @@ namespace FormComedia
                 while (txtline != null);
             }
 
-            ISession session1 = xSessionManager.GetCurrentSession();
+            ISession session1 = SQLiteSessionManager.GetCurrentSession();
 
             using (ITransaction transaction = session1.BeginTransaction())
             {
@@ -159,7 +177,7 @@ namespace FormComedia
         public static void Import_Poet(string name, string poem_name)
         {
             Poet poet = new Poet { 
-                Name = name
+                Name = name 
             };            
             Poem poem = new Poem
             {
@@ -168,7 +186,7 @@ namespace FormComedia
             };
             poet.Poems.Add(poem);
 
-            ISession session1 = xSessionManager.GetCurrentSession();
+            ISession session1 = SQLiteSessionManager.GetCurrentSession();
 
             using (ITransaction transaction = session1.BeginTransaction())
             {
@@ -184,7 +202,7 @@ namespace FormComedia
             run.Text = text;
 
 
-            ISession session1 = xSessionManager.GetCurrentSession();
+            ISession session1 = SQLiteSessionManager.GetCurrentSession();
 
             using (ITransaction transaction = session1.BeginTransaction())
             {

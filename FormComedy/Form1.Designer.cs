@@ -57,6 +57,8 @@
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.buttonQuery = new System.Windows.Forms.Button();
+            this.commandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.summeryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -69,7 +71,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.commandToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(699, 24);
@@ -342,6 +345,21 @@
             this.buttonQuery.UseVisualStyleBackColor = true;
             this.buttonQuery.Click += new System.EventHandler(this.buttonQuery_Click);
             // 
+            // commandToolStripMenuItem
+            // 
+            this.commandToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.summeryToolStripMenuItem});
+            this.commandToolStripMenuItem.Name = "commandToolStripMenuItem";
+            this.commandToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
+            this.commandToolStripMenuItem.Text = "Command";
+            // 
+            // summeryToolStripMenuItem
+            // 
+            this.summeryToolStripMenuItem.Name = "summeryToolStripMenuItem";
+            this.summeryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.summeryToolStripMenuItem.Text = "Summary";
+            this.summeryToolStripMenuItem.Click += new System.EventHandler(this.summeryToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -400,6 +418,8 @@
         private System.Windows.Forms.TextBox textBoxKey;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Button buttonQuery;
+        private System.Windows.Forms.ToolStripMenuItem commandToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem summeryToolStripMenuItem;
     }
 }
 

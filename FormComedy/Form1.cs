@@ -137,31 +137,74 @@ namespace FormComedia
 
         private void buildToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // create virgil
-            Character camilla = new Character
+            Place fl = new Place { Name = "Florence" };
+            Poem vn = new Poem
+            {
+                Name = "Vila Nouva"
+            };
+
+            Poet dante = new Poet
+            {
+                Name = "Dante",
+                Place = fl
+            };
+            dante.AddPoem(vn);
+            Character ch_dante = new Character
+            {
+                Name = "Dante",
+                FullName = "Dante"
+            };
+            Character ch_beatrice = new Character
+            {
+                Name = "Beatrice",
+                FullName = "Beatrice",
+                Place = fl
+            };
+
+            vn.AddCharacter(ch_dante);
+            vn.AddCharacter(ch_beatrice);
+
+            Character ch_camilla = new Character
             {
                 Name = "Camilla"
             };
-            Character nisus = new Character
+            Character ch_nisus = new Character
             {
-                Name = "Nisus"
+                Name  = "Nisus"
             };
+
+
+
+
             Poem m = new Poem
             {
                 Name = "Aeneid"
             };
-            m.AddCharacter(camilla);
-            m.AddCharacter(nisus);
+            m.AddCharacter(ch_camilla);
+            m.AddCharacter(ch_nisus);
 
-            Poet f = new Poet
+            Poet virgil = new Poet
             {
                 Name = "Virgil",
+                Place = new Place { Name = "Mantuan" }
             };
-            f.AddPoem(m);
-            //DBHelper.save<Character>(camilla);
-            DBHelper.save<Poet>(f);
-            DBHelper.save<Character>(camilla);
-            DBHelper.save<Character>(nisus);
+            virgil.AddPoem(m);
+
+
+            Poet ovid = new Poet
+            {
+                Name = "Ovid",                
+            };
+            Poet lucan = new Poet
+            {
+                Name = "Lucan",
+            };
+
+            DBHelper.save<Poet>(dante);
+            DBHelper.save<Poet>(virgil);
+            DBHelper.save<Poet>(ovid);
+            DBHelper.save<Poet>(lucan);
+
         }
 
         private void textBox1_MouseUp(object sender, MouseEventArgs e)
@@ -181,38 +224,80 @@ namespace FormComedia
         {
             StringBuilder sb = new StringBuilder();
             var key_word = textBoxKey.Text;
-            var poets = DBHelper.GetAllWithRestrictionsEq<Poet>("Name", key_word);
+            var poets = DBHelper.GetAllWithRestrictionsInsentiveLike<Poet>("Name", key_word);
             if(poets != null && poets.Count > 0)
             {   
-                sb.AppendLine("Poet" + " " +  poets[0].Name);
+                sb.AppendLine("Poet" + " " +  poets[0].ToString());
                 if (poets[0].Poems != null &&  poets[0].Poems.Count > 0)
                 {
-                    sb.AppendLine("  Poem " + poets[0].Poems[0].Name);
+                    sb.AppendLine("  Poem " + poets[0].Poems[0].ToString());
                 }
             }
 
-            var poems = DBHelper.GetAllWithRestrictionsEq<Poem>("Name", key_word);
+            var poems = DBHelper.GetAllWithRestrictionsInsentiveLike<Poem>("Name", key_word);
             if (poems != null && poems.Count > 0)
             {
                 sb.AppendLine("Poem" + " " + poems[0].Name);
-                sb.AppendLine("  Auther " + poems[0].Author.Name);
+                sb.AppendLine("  Auther " + poems[0].Author.ToString());
 
             }
 
-            var characters = DBHelper.GetAllWithRestrictionsEq<Character>("Name", key_word);
+            var characters = DBHelper.GetAllWithRestrictionsLike<Character>("Name", key_word);
             if (characters != null && characters.Count > 0)
             {
-                sb.AppendLine("Charactor" + " " + characters[0].Name);
+                sb.AppendLine("Charactor" + " " + characters[0].ToString());
                 if (characters[0].Poem != null)
                 {
-                    sb.AppendLine("  Poem " + characters[0].Poem.Name);
+                    sb.AppendLine("  Poem " + characters[0].Poem.ToString());
                 }
 
 
             }
-           
-
+            var xxx = DBHelper.GetAll<Person>();
             textBox3.Text = sb.ToString();
+        }
+
+        private void summeryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine("## Places");
+            var places = DBHelper.GetAll<Place>();
+            foreach (var place in places)
+            {
+                sb.AppendLine(place.ToString());
+            }
+
+
+            sb.AppendLine("## Person Table");
+            var people = DBHelper.GetAll<Person>();
+            foreach(var person in people)
+            {
+                sb.AppendLine(person.ToString());
+            }
+
+            sb.AppendLine("## Poets");
+            var poets = DBHelper.GetAll<Poet>();
+            foreach (var poet in poets)
+            {
+                sb.AppendLine(poet.ToString());
+            }
+
+            sb.AppendLine("## Characters");
+            var characters = DBHelper.GetAll<Character>();
+            foreach (var character in characters)
+            {
+                sb.AppendLine(character.ToString());
+            }
+
+
+            sb.AppendLine("## Poems");
+            var poems = DBHelper.GetAll<Poem>();
+            foreach (var poem in poems)
+            {
+                sb.AppendLine(poem.ToString());
+            }
+            MessageBox.Show(sb.ToString());
         }
     }
 

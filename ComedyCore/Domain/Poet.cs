@@ -6,19 +6,14 @@ using System.Threading.Tasks;
 
 namespace ComediaCore.Domain
 {
-    public class Character : IEntity
+    public class Character : Person
     {
-        public virtual int Id
+        /*public virtual int Id
         {
             get;
             set;
-        }
+        }*/
 
-        public virtual string Name
-        {
-            get;
-            set;
-        }
 
         public virtual string Story
         {
@@ -30,6 +25,21 @@ namespace ComediaCore.Domain
         {
             get;
             set;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Character.Name: " + Name);
+            if (Place != null && Place.Name != null)
+            {
+                sb.AppendLine("Character.Place: " + Place.Name);
+            }
+            if (Story != null)
+            {
+                sb.AppendLine(Story.ToString());
+            }
+            return sb.ToString();
         }
     }
 
@@ -67,26 +77,17 @@ namespace ComediaCore.Domain
         {
             Characters = new HashSet<Character>();
         }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Poem.Name: " + Name.ToString());
+            return sb.ToString();
+        }
     }
 
-    public class Poet
+    public class Poet : Person
     {
-        public virtual int Id
-        {
-            get;
-            set;
-        }
-
-        public virtual string Name
-        {
-            get;
-            set;
-        }
-        public virtual string Place
-        {
-            get;
-            set;
-        }
         public virtual void AddPoem(Poem m)
         {
             m.Author = this;
@@ -104,6 +105,19 @@ namespace ComediaCore.Domain
             Poems = new List<Poem>();
         }
 
-
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Poet.Name: " + Name);
+            if (Place != null && Place.Name != null)
+            {
+                sb.AppendLine("Poet.Place: " + Place.Name);
+            }
+            foreach (var poem in Poems)
+            {
+                sb.AppendLine(poem.ToString());
+            }
+            return sb.ToString();
+        }
     }
 }
