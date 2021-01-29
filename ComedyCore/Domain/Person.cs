@@ -34,6 +34,7 @@ namespace ComediaCore.Domain
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Person.Id:     " + Id);
             sb.AppendLine("Person.Name:   " + Name);
             if(!string.IsNullOrEmpty(FullName))
             {
@@ -83,6 +84,7 @@ namespace ComediaCore.Domain
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Place.Id:     " + Id);
             sb.AppendLine("Place.Name: " + Name);
             
             return sb.ToString();

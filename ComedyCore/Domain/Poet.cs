@@ -8,12 +8,7 @@ namespace ComediaCore.Domain
 {
     public class Character : Person
     {
-        /*public virtual int Id
-        {
-            get;
-            set;
-        }*/
-
+       
 
         public virtual string Story
         {
@@ -30,6 +25,7 @@ namespace ComediaCore.Domain
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Character.Id:     " + Id);
             sb.AppendLine("Character.Name: " + Name);
             if (Place != null && Place.Name != null)
             {
@@ -81,7 +77,9 @@ namespace ComediaCore.Domain
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("Poem.Name: " + Name.ToString());
+            sb.AppendLine("Poem.Id:     " + Id);
+
+            sb.AppendLine("Poem.Name:   " + Name.ToString());
             return sb.ToString();
         }
     }
@@ -108,6 +106,7 @@ namespace ComediaCore.Domain
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Poet.Id:     " + Id);
             sb.AppendLine("Poet.Name: " + Name);
             if (Place != null && Place.Name != null)
             {

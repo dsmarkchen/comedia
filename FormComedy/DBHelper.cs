@@ -87,21 +87,29 @@ namespace FormComedia
 
         private static void CloseSession()
         {
-            var session2 = SQLiteSessionManager.Unbind();
-            if (session2 != null)
+            try
             {
-                if (session2.Transaction.IsActive)
+                var session2 = SQLiteSessionManager.Unbind();
+
+                if (session2 != null)
                 {
-                    try
+                    if (session2.Transaction.IsActive)
                     {
-                        session2.Transaction.Commit();
+                        try
+                        {
+                            session2.Transaction.Commit();
+                        }
+                        catch
+                        {
+                            session2.Transaction.Rollback();
+                        }
                     }
-                    catch
-                    {
-                        session2.Transaction.Rollback();
-                    }
+                    session2.Close();
                 }
-                session2.Close();
+            }
+            catch
+            {
+
             }
         }
         public static bool Updatedb()
