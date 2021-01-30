@@ -20,6 +20,30 @@ namespace ComediaTest
             };
             Assert.That(f.Id == 0);
         }
+
+        [Test]
+        public void newPlace_twoPersonShareOnePlace_MustCreate()
+        {
+            Place f = new Place
+            {
+                Name = "Florance"
+            };
+            Person p1 = new Person
+            {
+                Name = "Dante",
+                Place = f
+            };
+            Person p2 = new Person
+            {
+                Name = "Dante",
+                Place = f
+            };
+            f.AddPerson(p1);
+            f.AddPerson(p2);
+            Assert.That(f.Id == 0);
+            Assert.That(p1.Id == 0);
+            Assert.That(p2.Id == 0);
+        }
     }
 
 
@@ -67,6 +91,14 @@ namespace ComediaTest
             {
                 Name = "Mantua"
             };
+
+            Person person = new Person
+            {
+                Name = "Virgil"
+
+            };
+            f.AddPerson(person);
+            
 
             using (ISession session = sqliteSessionFactory.Session)
             {
@@ -123,7 +155,45 @@ namespace ComediaTest
             }
         }
 
+        [Test]
+        public void newPlace_twoPersonShareOnePlace_MustCreate()
+        {
+            Place f = new Place
+            {
+                Name = "Florance"
+            };
+            Person p1 = new Person
+            {
+                Name = "Dante",
+                Place = f
+            };
+            Person p2 = new Person
+            {
+                Name = "Beatrice",
+                Place = f
+            };
+            f.AddPerson(p1);
+            f.AddPerson(p2);
+            Assert.That(f.Id == 0);
+            Assert.That(p1.Id == 0);
+            Assert.That(p2.Id == 0);
 
+            using (ISession session = sqliteSessionFactory.Session)
+            {
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    Assert.That(f.Id == 0);
+
+                    session.SaveOrUpdate(p1);
+                    session.SaveOrUpdate(p2);
+                    session.SaveOrUpdate(f);
+                    transaction.Commit();
+
+                    Assert.That(f.Id > 0);
+                }
+
+            }
+        }
 
     }
 }

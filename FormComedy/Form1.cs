@@ -1,4 +1,5 @@
-﻿using ComediaCore.Domain;
+﻿using ComediaCore.Helper;
+using ComediaCore.Domain;
 using NHibernate;
 using System;
 using System.Collections.Generic;
@@ -73,21 +74,10 @@ namespace FormComedia
                     if(canto.Number == cantoNumber)
                     {
                         foreach(var line in canto.Lines)
-                        {
+                        {   
                             if(line.Number >= start && line.Number <= end)
                             {
-                                if(line.Number % 3 != 1)
-                                {
-                                    sb.Append("    ");
-                                }
-                                string input = line.ToString();
-                                input = input.First().ToString().ToUpper() + String.Join("", input.Skip(1));
-
-                                sb.AppendLine(input);
-                                if (line.Number % 3 == 0)
-                                {
-                                    sb.AppendLine("");
-                                }
+                                sb.Append(ComediaHelper.CantoReformat(line.Text, line.Number));
                             }
                         }
                     }
@@ -137,7 +127,33 @@ namespace FormComedia
 
         private void buildToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Place fl = new Place { Name = "Florence" };
+            Place place_fl = new Place { Name = "Florence" };
+            Place place_rome = new Place { Name = "Rome" };
+            Place place_nola = new Place { Name = "Nola" };
+            Politician politician_augustus = new Politician
+            {
+                Name = "Augustus"
+            };
+            Person claudia = new Person
+            {
+                Name = "Claudia"
+            };
+            Person scribonia = new Person
+            {
+                Name = "Scribonia"
+            };
+            Person livia = new Person
+            {
+                Name = "Livia"
+            };
+            politician_augustus.AddSpouse(claudia);
+            politician_augustus.AddSpouse(scribonia);
+            politician_augustus.AddSpouse(livia);
+
+            place_rome.AddPerson(politician_augustus);
+            place_nola.AddPersonDead(politician_augustus);
+
+
             Poem vn = new Poem
             {
                 Name = "Vila Nouva"
@@ -145,9 +161,10 @@ namespace FormComedia
 
             Poet dante = new Poet
             {
-                Name = "Dante",
-                Place = fl
-            };
+                Name = "Dante",                
+            };            
+            place_fl.AddPerson(dante);
+
             dante.AddPoem(vn);
             Character ch_dante = new Character
             {
@@ -157,9 +174,10 @@ namespace FormComedia
             Character ch_beatrice = new Character
             {
                 Name = "Beatrice",
-                FullName = "Beatrice",
-                Place = fl
+                FullName = "Beatrice",                
             };
+            place_fl.AddPerson(ch_dante);
+            place_fl.AddPerson(ch_beatrice);
 
             vn.AddCharacter(ch_dante);
             vn.AddCharacter(ch_beatrice);
@@ -183,11 +201,16 @@ namespace FormComedia
             m.AddCharacter(ch_camilla);
             m.AddCharacter(ch_nisus);
 
+            Place mantuan = new Place
+            {
+                Name = "Mantuan"
+            };
             Poet virgil = new Poet
             {
                 Name = "Virgil",
-                Place = new Place { Name = "Mantuan" }
+                Place = mantuan
             };
+            mantuan.AddPerson(virgil);
             virgil.AddPoem(m);
 
 
@@ -199,12 +222,16 @@ namespace FormComedia
             {
                 Name = "Lucan",
             };
-
+            
             DBHelper.save<Poet>(dante);
             DBHelper.save<Poet>(virgil);
             DBHelper.save<Poet>(ovid);
             DBHelper.save<Poet>(lucan);
 
+            DBHelper.save<Politician>(politician_augustus);
+            DBHelper.save<Person>(claudia);
+            DBHelper.save<Person>(livia);
+            DBHelper.save<Person>(scribonia);
         }
 
         private void textBox1_MouseUp(object sender, MouseEventArgs e)
@@ -214,7 +241,7 @@ namespace FormComedia
                 if (textBox1.SelectedText.Length > 0)
                 {
                     var text = textBox1.SelectedText;
-                    text= text.Trim(new char[] { ',', ' ', '.', '"', '-' });
+                    text = ComediaHelper.TrimUnecessaryCharacters(text);
                     textBoxKey.Text = text;
                 }
             }
@@ -298,6 +325,13 @@ namespace FormComedia
                 sb.AppendLine(poem.ToString());
             }
             MessageBox.Show(sb.ToString());
+        }
+
+        private void tableViewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormViewTable x = new FormViewTable();
+            x.Icon = this.Icon;
+            x.ShowDialog();
         }
     }
 

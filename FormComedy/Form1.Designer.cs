@@ -34,6 +34,8 @@
             this.initToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buildToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.commandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.summeryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.buttonGet = new System.Windows.Forms.Button();
@@ -52,13 +54,12 @@
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.buttonQuery = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxKey = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.buttonQuery = new System.Windows.Forms.Button();
-            this.commandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.summeryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tableViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -109,6 +110,22 @@
             this.buildToolStripMenuItem.Size = new System.Drawing.Size(101, 22);
             this.buildToolStripMenuItem.Text = "Build";
             this.buildToolStripMenuItem.Click += new System.EventHandler(this.buildToolStripMenuItem_Click);
+            // 
+            // commandToolStripMenuItem
+            // 
+            this.commandToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.summeryToolStripMenuItem,
+            this.tableViewToolStripMenuItem});
+            this.commandToolStripMenuItem.Name = "commandToolStripMenuItem";
+            this.commandToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
+            this.commandToolStripMenuItem.Text = "Command";
+            // 
+            // summeryToolStripMenuItem
+            // 
+            this.summeryToolStripMenuItem.Name = "summeryToolStripMenuItem";
+            this.summeryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.summeryToolStripMenuItem.Text = "Summary";
+            this.summeryToolStripMenuItem.Click += new System.EventHandler(this.summeryToolStripMenuItem_Click);
             // 
             // contextMenuStrip1
             // 
@@ -300,6 +317,16 @@
             this.panel2.Size = new System.Drawing.Size(241, 45);
             this.panel2.TabIndex = 0;
             // 
+            // buttonQuery
+            // 
+            this.buttonQuery.Location = new System.Drawing.Point(169, 5);
+            this.buttonQuery.Name = "buttonQuery";
+            this.buttonQuery.Size = new System.Drawing.Size(75, 23);
+            this.buttonQuery.TabIndex = 10;
+            this.buttonQuery.Text = "Query";
+            this.buttonQuery.UseVisualStyleBackColor = true;
+            this.buttonQuery.Click += new System.EventHandler(this.buttonQuery_Click);
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -335,30 +362,12 @@
             this.panel1.Size = new System.Drawing.Size(152, 144);
             this.panel1.TabIndex = 11;
             // 
-            // buttonQuery
+            // tableViewToolStripMenuItem
             // 
-            this.buttonQuery.Location = new System.Drawing.Point(169, 5);
-            this.buttonQuery.Name = "buttonQuery";
-            this.buttonQuery.Size = new System.Drawing.Size(75, 23);
-            this.buttonQuery.TabIndex = 10;
-            this.buttonQuery.Text = "Query";
-            this.buttonQuery.UseVisualStyleBackColor = true;
-            this.buttonQuery.Click += new System.EventHandler(this.buttonQuery_Click);
-            // 
-            // commandToolStripMenuItem
-            // 
-            this.commandToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.summeryToolStripMenuItem});
-            this.commandToolStripMenuItem.Name = "commandToolStripMenuItem";
-            this.commandToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
-            this.commandToolStripMenuItem.Text = "Command";
-            // 
-            // summeryToolStripMenuItem
-            // 
-            this.summeryToolStripMenuItem.Name = "summeryToolStripMenuItem";
-            this.summeryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.summeryToolStripMenuItem.Text = "Summary";
-            this.summeryToolStripMenuItem.Click += new System.EventHandler(this.summeryToolStripMenuItem_Click);
+            this.tableViewToolStripMenuItem.Name = "tableViewToolStripMenuItem";
+            this.tableViewToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.tableViewToolStripMenuItem.Text = "Table View";
+            this.tableViewToolStripMenuItem.Click += new System.EventHandler(this.tableViewToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -420,6 +429,7 @@
         private System.Windows.Forms.Button buttonQuery;
         private System.Windows.Forms.ToolStripMenuItem commandToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem summeryToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tableViewToolStripMenuItem;
     }
 }
 

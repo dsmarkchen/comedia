@@ -42,7 +42,7 @@ namespace ComediaTest
         }
 
         [Test]
-        public void createPoet_byDefault_shouldCreate()
+        public void createPoet_byDefault_shouldThrowException()
         {
             Poet f = new Poet
             {
@@ -54,11 +54,8 @@ namespace ComediaTest
                 {
                     Assert.That(f.Id == 0);
 
-                    session.SaveOrUpdate(f);
-
-                    transaction.Commit();
-
-                    Assert.That(f.Id > 0);
+                    Assert.Throws<NHibernate.PropertyValueException>(() => session.SaveOrUpdate(f));
+                    
                 }
 
             }

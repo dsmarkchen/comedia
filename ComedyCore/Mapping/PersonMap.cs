@@ -14,16 +14,26 @@ namespace ComediaCore.Mapping
         {
             Id(x => x.Id);
 
-            Map(x => x.Name);
+            Map(x => x.Name)
+                .Not.Nullable();
 
-            HasOne(x => x.Place)
+            HasMany(x => x.Spouse)
+                .KeyColumn("Person_id")
+                .KeyNullable()
+                .AsBag()
+                .Inverse()
+                .Cascade.All()
+                .ForeignKeyConstraintName("FK_Person_PersonId");
+            
+
+            References(x => x.Place)    
+                .Column("Place_id")
                 .Cascade.All();
 
-            /*
-            References(x => x.Poet).Cascade.All();
+            References(x => x.DeadPlace)
+                .Column("DeadPlace_id")
+               .Cascade.All();
 
-            References(x => x.Character).Cascade.All();
-            */
         }
     }
 
@@ -36,7 +46,10 @@ namespace ComediaCore.Mapping
             Map(x => x.Name)
                 .Not.Nullable();
 
-            References(x => x.Person).Cascade.All();            
+            HasMany(x => x.People )
+                .KeyColumn("Person_id")
+                .Inverse()                
+                .Cascade.All();            
         }
     }
 }
