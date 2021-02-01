@@ -208,7 +208,7 @@ namespace FormComedia
             Poet virgil = new Poet
             {
                 Name = "Virgil",
-                Place = mantuan
+                BornPlace = mantuan
             };
             mantuan.AddPerson(virgil);
             virgil.AddPoem(m);

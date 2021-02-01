@@ -209,7 +209,7 @@ namespace ComediaTest
             Poet f = new Poet
             {
                 Name = "Virgil",
-                Place = mantuan
+                BornPlace = mantuan
             };
             m.Author = f;
             f.Poems.Add(m);
@@ -217,12 +217,12 @@ namespace ComediaTest
             Character dante = new Character
             {
                 Name = "Dante",
-                Place = fl
+                BornPlace = fl
             };
             Character beatrice = new Character
             {
                 Name = "Beatrice",
-                Place = fl
+                BornPlace = fl
             };
             Poem m2 = new Poem
             {
@@ -235,7 +235,7 @@ namespace ComediaTest
             Poet f2 = new Poet
             {
                 Name = "Dante",
-                Place = fl
+                BornPlace = fl
             };
             m2.Author = f2;
             f2.Poems.Add(m2);

@@ -29,7 +29,7 @@ namespace ComediaCore.Domain
             get;
             set;
         }
-        public virtual Place Place
+        public virtual Place BornPlace
         {
             get;
             set;
@@ -43,7 +43,7 @@ namespace ComediaCore.Domain
         public virtual IList<Person> Spouse
         {
             get;
-            set;
+            protected set;
         }
         public virtual void AddSpouse(Person person)
         {
@@ -75,9 +75,9 @@ namespace ComediaCore.Domain
             {
                 sb.AppendLine("Person.FullName:  " + FullName);
             }
-            if (Place != null)
+            if (BornPlace != null)
             {
-                sb.AppendLine("Person.Born:      " + Place.ToString());
+                sb.AppendLine("Person.Born:      " + BornPlace.ToString());
             }
             if (DeadPlace != null)
             {
@@ -111,23 +111,29 @@ namespace ComediaCore.Domain
         public virtual IList<Person> People
         {
             get;
-            set;
-        } 
+            protected set;
+        }
+        public virtual IList<Person> DeadPeople
+        {
+            get;
+            protected set;
+        }
 
         public Place()
         {
             People = new List<Person>();
+            DeadPeople = new List<Person>();
         }
 
         public virtual void AddPerson(Person person)
         {
-            person.Place = this;
+            person.BornPlace = this;
             People.Add(person);
         }
         public virtual void AddPersonDead(Person person)
         {
             person.DeadPlace = this;
-            People.Add(person);
+            DeadPeople.Add(person);
         }
 
         public override string ToString()

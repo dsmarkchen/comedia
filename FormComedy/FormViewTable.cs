@@ -44,9 +44,9 @@ namespace FormComedia
                                 id = itm.Id,
                                 name = itm.Name,
                             };
-                            if (itm.Place != null)
+                            if (itm.BornPlace != null)
                             {
-                                entity.Born = itm.Place.Name;
+                                entity.Born = itm.BornPlace.Name;
                             }
                             if (itm.DeadPlace != null)
                             {
@@ -93,7 +93,14 @@ namespace FormComedia
                             if (itm.People != null) {
                                 foreach (var person in itm.People)
                                 {
-                                    entity.People += person.Name;
+                                    entity.Born += person.Name;
+                                }
+                            }
+                            if(itm.DeadPeople != null)
+                            {
+                                foreach (var person in itm.DeadPeople)
+                                {
+                                    entity.Dead += person.Name;
                                 }
                             }
 
@@ -123,7 +130,9 @@ namespace FormComedia
     {
         public int id { get; set; }
         public string name { get; set; }
-        public string People { get; set; }
+        public string Born { get; set; }
+
+        public string Dead { get; set; }
     };
     public class EntityPerson
     {

@@ -93,7 +93,7 @@ namespace ComediaTest
                     transaction.Commit();
 
                     Assert.That(augustus.Id > 0);
-                    Assert.That(augustus.Place != null);
+                    Assert.That(augustus.BornPlace != null);
                 }
 
             }
@@ -130,7 +130,7 @@ namespace ComediaTest
                     transaction.Commit();
 
                     Assert.That(augustus.Id > 0);
-                    Assert.That(augustus.Place != null);
+                    Assert.That(augustus.BornPlace != null);
                     Assert.That(augustus.DeadPlace != null);
                 }
 
@@ -180,7 +180,7 @@ namespace ComediaTest
                     transaction.Commit();
 
                     Assert.That(augustus.Id > 0);
-                    Assert.That(augustus.Place != null);
+                    Assert.That(augustus.BornPlace != null);
                     Assert.That(livia.Id > 0);
                     Assert.That(livia.Spouse[0].Name == "Augustus");
                     Assert.That(augustus.Spouse[0].Name == "Claudia");

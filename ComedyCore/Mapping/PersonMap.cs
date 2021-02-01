@@ -26,12 +26,14 @@ namespace ComediaCore.Mapping
                 .ForeignKeyConstraintName("FK_Person_PersonId");
             
 
-            References(x => x.Place)    
-                .Column("Place_id")
+            References(x => x.BornPlace, "BornPlace_id")   
+                .Column("BornPlace_id")
+                .ForeignKey("Born_PlaceId")
                 .Cascade.All();
 
-            References(x => x.DeadPlace)
+            References(x => x.DeadPlace, "DeadPlace_id")
                 .Column("DeadPlace_id")
+                .ForeignKey("Dead_PlaceId")
                .Cascade.All();
 
         }
@@ -41,15 +43,23 @@ namespace ComediaCore.Mapping
     {
         public PlaceMap()
         {
-            Id(x => x.Id);
+            Table("Place");
+            Id(x => x.Id).GeneratedBy.Identity();
 
             Map(x => x.Name)
                 .Not.Nullable();
 
-            HasMany(x => x.People )
-                .KeyColumn("Person_id")
+            HasMany(x => x.People )   
+                .KeyColumn("BornPlace_id")
                 .Inverse()                
-                .Cascade.All();            
+                .Cascade.All()
+                .ForeignKeyConstraintName("FK_Born_PlaceId");
+
+            HasMany(x => x.DeadPeople)
+                .KeyColumn("DeadPlace_id")
+                .Inverse()
+                .Cascade.All()                
+            ;
         }
     }
 }

@@ -31,12 +31,12 @@ namespace ComediaTest
             Person p1 = new Person
             {
                 Name = "Dante",
-                Place = f
+                BornPlace = f
             };
             Person p2 = new Person
             {
                 Name = "Dante",
-                Place = f
+                BornPlace = f
             };
             f.AddPerson(p1);
             f.AddPerson(p2);
@@ -129,12 +129,12 @@ namespace ComediaTest
             Person person = new Person
             {
                 Name = "Virgil",
-                Place = m
+                BornPlace = m
             };
             Person person2 = new Person
             {
                 Name = "Dante",
-                Place = f
+                BornPlace = f
             };
 
             using (ISession session = sqliteSessionFactory.Session)
@@ -165,12 +165,12 @@ namespace ComediaTest
             Person p1 = new Person
             {
                 Name = "Dante",
-                Place = f
+                BornPlace = f
             };
             Person p2 = new Person
             {
                 Name = "Beatrice",
-                Place = f
+                BornPlace = f
             };
             f.AddPerson(p1);
             f.AddPerson(p2);
