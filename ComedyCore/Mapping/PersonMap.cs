@@ -17,14 +17,23 @@ namespace ComediaCore.Mapping
             Map(x => x.Name)
                 .Not.Nullable();
 
-            HasMany(x => x.Spouse)
-                .KeyColumn("Person_id")
-                .KeyNullable()
+            HasManyToMany(x => x.Spouse)
+                .ParentKeyColumn("Person_id")
+                .ChildKeyColumn("Spouse_Id")
                 .AsBag()
-                .Inverse()
                 .Cascade.All()
-                .ForeignKeyConstraintName("FK_Person_PersonId");
+                .Table("SpouseLinkTable");
+
+
+            HasMany(x => x.Children)
+                .KeyColumn("Parent_id")                
+                .AsBag()
+                .Cascade.All()
+                ;
             
+            References(x => x.Parent)
+                .Column("Parent_id")
+                .Cascade.All();
 
             References(x => x.BornPlace, "BornPlace_id")   
                 .Column("BornPlace_id")

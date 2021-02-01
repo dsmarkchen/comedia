@@ -192,6 +192,36 @@ namespace ComediaTest
         }
 
 
+        [Test]
+        public void createCavalcanti_withSonAndFather_shouldCreate()
+        {
+            Person guido = new Person
+            {
+                Name = "Guido"
+            };
+            Person cavalcanti = new Person
+            {
+                Name = "Cavalcanti"
+            };
+            cavalcanti.AddChild(guido);
+            
 
+            using (ISession session = sqliteSessionFactory.Session)
+            {
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    Assert.That(cavalcanti.Id == 0);
+
+                    session.SaveOrUpdate(cavalcanti);
+                    session.SaveOrUpdate(guido);
+                    transaction.Commit();
+
+                    Assert.That(cavalcanti.Id > 0);
+                    Assert.That(cavalcanti.Children.Count == 1);
+                    Assert.That(guido.Parent.Name == "Cavalcanti");
+                }
+
+            }
+        }
     }
 }

@@ -11,6 +11,9 @@ namespace ComediaCore.Domain
         public Person()
         {
             Spouse = new List<Person>();
+
+            Children = new List<Person>();
+                        
         }
         public virtual int Id
         {
@@ -45,6 +48,9 @@ namespace ComediaCore.Domain
             get;
             protected set;
         }
+        
+
+
         public virtual void AddSpouse(Person person)
         {
 
@@ -59,36 +65,89 @@ namespace ComediaCore.Domain
                         break;
                     }
                 }
-                if(!found)
+                if (!found)
+                {
                     person.Spouse.Add(this);
+                    Spouse.Add(person);
+                }
             }
-            Spouse.Add(person);
+            
         }
 
+        public virtual IList<Person> Children
+        {
+            get;
+            protected set;
+        }
+
+        public virtual Person Parent
+        {
+            get;
+            protected set;
+        }
+
+        public virtual void AddChild(Person child)
+        {
+
+            if (this.Children != null)
+            {
+                bool found = false;
+                foreach (var person in this.Children)
+                {
+                    if (person.Name == this.Name)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    child.Parent = this;
+                    this.Children.Add(this);                    
+                }
+            }
+            
+        }
 
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("Person.Id:     " + Id);
             sb.AppendLine("Person.Name:   " + Name);
-            if(!string.IsNullOrEmpty(FullName))
-            {
-                sb.AppendLine("Person.FullName:  " + FullName);
-            }
-            if (BornPlace != null)
-            {
+            sb.AppendLine("Person.FullName:  " + FullName);
+            if(BornPlace != null)
                 sb.AppendLine("Person.Born:      " + BornPlace.ToString());
-            }
+            else
+                sb.AppendLine("Person.Born:      " );
+
             if (DeadPlace != null)
-            {
                 sb.AppendLine("Person.Dead:      " + DeadPlace.ToString());
+            else
+            {
+                sb.AppendLine("Person.Dead:      " );
             }
+
             if(Spouse.Count > 0)
             {
                 foreach(var spouse in Spouse)
                 {
                     sb.AppendLine("Person.Spouse:      " + spouse.Name);
                 }
+            }
+            else
+            {
+                sb.AppendLine("Person.Spouse:      " );
+            }
+            if (Children.Count > 0)
+            {
+                foreach (var child in Children)
+                {
+                    sb.AppendLine("Person.Child:      " + child.Name);
+                }
+            }
+            else
+            {
+                sb.AppendLine("Person.Child:      ");
             }
             return sb.ToString();
         }
