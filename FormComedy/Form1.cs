@@ -232,6 +232,8 @@ namespace FormComedia
             DBHelper.save<Person>(claudia);
             DBHelper.save<Person>(livia);
             DBHelper.save<Person>(scribonia);
+
+            ComediaBuilder.build_politician();
         }
 
         private void textBox1_MouseUp(object sender, MouseEventArgs e)

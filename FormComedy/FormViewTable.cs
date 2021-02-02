@@ -33,38 +33,65 @@ namespace FormComedia
                     break;
                 case "Person":
                     {
-                        var items = DBHelper.GetAll<Person>();
-
-
-                        BindingList<EntityPerson> lst = new BindingList<EntityPerson>();
-                        foreach (var itm in items)
+                        IList<Person> items;
+                        if(string.IsNullOrEmpty(textBoxKey.Text))
+                            items= DBHelper.GetAll<Person>();
+                        else
                         {
-                            EntityPerson entity = new EntityPerson
-                            {
-                                id = itm.Id,
-                                name = itm.Name,
-                            };
-                            if (itm.BornPlace != null)
-                            {
-                                entity.Born = itm.BornPlace.Name;
-                            }
-                            if (itm.DeadPlace != null)
-                            {
-                                entity.Dead = itm.DeadPlace.Name;
-                            }
-
-                            if (itm.Spouse != null)
-                            {
-                                foreach (var person in itm.Spouse)
-                                {
-                                    entity.Spouse += person.Name;
-                                }
-                            }
-
-                            lst.Add(entity);
+                            items = DBHelper.GetAllWithOrRestrictionsInsentiveLike<Person>("Name", textBoxKey.Text, "FullName");
                         }
-                        _bs.DataSource = lst;
-                        dataGridView1.DataSource = _bs;
+                        StringBuilder sb = new StringBuilder();
+                        try
+                        {
+                            BindingList<EntityPerson> lst = new BindingList<EntityPerson>();
+                            foreach (var itm in items)
+                            {
+                                sb.AppendLine(itm.ToString());
+                                EntityPerson entity = new EntityPerson
+                                {
+                                    id = itm.Id,
+                                    name = itm.Name,
+                                    fullname = itm.FullName,
+                                };
+                                if (itm.BornPlace != null)
+                                {
+                                    entity.Born = itm.BornPlace.Name;
+                                }
+                                if (itm.DeadPlace != null)
+                                {
+                                    entity.Dead = itm.DeadPlace.Name;
+                                }
+
+                                if (itm.Spouse != null)
+                                {
+                                    foreach (var person in itm.Spouse)
+                                    {
+                                        entity.Spouse += person.Name;
+                                    }
+                                }
+                                if (itm.Children != null)
+                                {
+                                    foreach (var person in itm.Children)
+                                    {
+                                        entity.Spouse += person.Name;
+                                    }
+                                }
+                                if (itm.Parent != null)
+                                {
+                                    entity.Parent = itm.Parent.Name;
+                                }
+
+
+                                lst.Add(entity);
+                            }
+                            _bs.DataSource = lst;
+                            dataGridView1.DataSource = _bs;
+                        }
+                        catch
+                        {
+
+                        }
+                        textBox1.Text = sb.ToString();
                     }
                         break;
                 case "Politician":
@@ -123,6 +150,16 @@ namespace FormComedia
             
 
         }
+
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void FormViewTable_Load(object sender, EventArgs e)
+        {
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+        }
     }
 
 
@@ -138,8 +175,14 @@ namespace FormComedia
     {
         public int id { get; set; }
         public string name { get; set; }
+
+        public string fullname { get; set; }
         public string Born { get; set; }
         public string Dead { get; set; }
         public string Spouse { get; set; }
+
+        public string Children { get; set; }
+
+        public string Parent { get; set; }
     };
 }

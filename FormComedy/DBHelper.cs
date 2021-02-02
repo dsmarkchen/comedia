@@ -67,6 +67,20 @@ namespace FormComedia
 
             return null;
         }
+        public static IList<T> GetAllWithOrRestrictionsInsentiveLike<T>(string name, object value, string name2)
+        {
+            ISession session = SQLiteSessionManager.GetCurrentSession();
+            var runs = session.CreateCriteria(typeof(T))
+                .Add(Restrictions.Or(
+                    Restrictions.InsensitiveLike(name, value),
+                    Restrictions.InsensitiveLike(name2, value)))
+                .List<T>();
+            if (runs.Count > 0)
+                return runs;
+
+            return null;
+        }
+
 
         public static IList<T> GetAllWithCriteriaEq<T>(string criteria, string name, object value)
         {
