@@ -76,6 +76,15 @@ namespace ComediaCore.Domain
             sb.AppendLine("Poem.Id:     " + Id);
 
             sb.AppendLine("Poem.Name:   " + Name.ToString());
+
+            sb.AppendLine("Poem.Author:   " + Author.Name.ToString());
+
+            foreach (var character in Characters)
+            {
+                sb.AppendLine("Poem.Character: " + character.Name);
+            }
+
+
             return sb.ToString();
         }
     }
@@ -106,7 +115,7 @@ namespace ComediaCore.Domain
 
             foreach (var poem in Poems)
             {
-                sb.AppendLine(poem.ToString());
+                sb.AppendLine("Poet.Poem: " + poem.Name);
             }
             return sb.ToString();
         }

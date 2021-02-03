@@ -218,7 +218,46 @@ namespace ComediaTest
 
                     Assert.That(cavalcanti.Id > 0);
                     Assert.That(cavalcanti.Children.Count == 1);
-                    Assert.That(guido.Parent.Name == "Cavalcanti");
+                    Assert.That(guido.Father.Name == "Cavalcanti");
+                }
+
+            }
+        }
+
+        [Test]
+        public void createSilivius_withMotherAndFather_shouldCreate()
+        {
+            Person silivius = new Person
+            {
+                Name = "Silvius"
+            };
+            Person aenaes = new Person
+            {
+                Name = "Aenaes"
+            };
+            Person lavania = new Person
+            {
+                Name = "Lavania"
+            };
+
+            aenaes.AddChild(silivius);
+            lavania.AddMotherChild(silivius);
+
+            using (ISession session = sqliteSessionFactory.Session)
+            {
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    Assert.That(silivius.Id == 0);
+
+                    session.SaveOrUpdate(silivius);
+                    session.SaveOrUpdate(aenaes);
+                    session.SaveOrUpdate(lavania);
+                    transaction.Commit();
+
+                    Assert.That(aenaes.Id > 0);
+                    Assert.That(lavania.Children.Count == 1);
+                    Assert.That(silivius.Father.Name == "Aenaes");
+                    Assert.That(silivius.Mother.Name == "Lavania");
                 }
 
             }

@@ -13,6 +13,17 @@ namespace FormComedia
 {
     public partial class FormViewTable : Form
     {
+        public string SearchKey
+        {
+            get
+            {
+                return textBoxKey.Text;
+            }
+            set
+            {
+                textBoxKey.Text = value;
+            }
+        }
         BindingSource _bs = new BindingSource();
         public FormViewTable()
         {
@@ -27,8 +38,26 @@ namespace FormComedia
             switch (item) {
                 case "Poet":
                     {
-                        var people = DBHelper.GetAll<Poet>();
+                        StringBuilder sb = new StringBuilder();
+                        IList<Poet> people;
+                        if (string.IsNullOrEmpty(textBoxKey.Text))
+                            people = DBHelper.GetAll<Poet>();
+                        else
+                        {
+                            people = DBHelper.GetAllWithOrRestrictionsStringInsentiveLike<Poet>("Name", textBoxKey.Text, "FullName");
+                        }
+
+                        if (people != null)
+                        {
+                            foreach (var itm in people)
+                            {
+                                sb.AppendLine(itm.ToString());
+                            }
+                        }
+                            
                         _bs.DataSource = people;
+
+                        textBox1.Text = sb.ToString();
                     }
                     break;
                 case "Person":
@@ -38,7 +67,7 @@ namespace FormComedia
                             items= DBHelper.GetAll<Person>();
                         else
                         {
-                            items = DBHelper.GetAllWithOrRestrictionsInsentiveLike<Person>("Name", textBoxKey.Text, "FullName");
+                            items = DBHelper.GetAllWithOrRestrictionsStringInsentiveLike<Person>("Name", textBoxKey.Text, "FullName");
                         }
                         StringBuilder sb = new StringBuilder();
                         try
@@ -76,9 +105,9 @@ namespace FormComedia
                                         entity.Spouse += person.Name;
                                     }
                                 }
-                                if (itm.Parent != null)
+                                if (itm.Father != null)
                                 {
-                                    entity.Parent = itm.Parent.Name;
+                                    entity.Parent = itm.Father.Name;
                                 }
 
 
@@ -96,10 +125,28 @@ namespace FormComedia
                         break;
                 case "Politician":
                     {
-                        var people = DBHelper.GetAll<Politician>();
+                        IList<Politician> people = null;
+
+                        if (string.IsNullOrEmpty(textBoxKey.Text))
+                            people = DBHelper.GetAll<Politician>();
+                        else
+                        {
+
+                        }
+
                         _bs.DataSource = people.ToList();
                         
                         dataGridView1.DataSource =_bs;
+
+
+                        StringBuilder sb = new StringBuilder();
+
+                        foreach (var itm in people)
+                        {
+                            sb.AppendLine(itm.ToString());
+                        }
+                        textBox1.Text = sb.ToString();
+
                     }
                     break;
 
@@ -135,13 +182,29 @@ namespace FormComedia
                         }
                         _bs.DataSource = lst;
                         dataGridView1.DataSource = _bs;
+
+
+                        StringBuilder sb = new StringBuilder();
+
+                        foreach (var itm in items)
+                        {
+                            sb.AppendLine(itm.ToString());
+                        }
+                        textBox1.Text = sb.ToString();
+
                     }
                     break;
 
                 case "Poem":
                     {
+                        StringBuilder sb = new StringBuilder();
                         var items = DBHelper.GetAll<Poem>();
+                        foreach (var itm in items)
+                        {
+                            sb.AppendLine(itm.ToString());
+                        }
                         _bs.DataSource = items;
+                        textBox1.Text = sb.ToString();
                     }
                     break;
                 default:

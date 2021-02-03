@@ -13,7 +13,6 @@ namespace ComediaCore.Domain
             Spouse = new List<Person>();
 
             Children = new List<Person>();
-                        
         }
         public virtual int Id
         {
@@ -80,7 +79,13 @@ namespace ComediaCore.Domain
             protected set;
         }
 
-        public virtual Person Parent
+        public virtual Person Father
+        {
+            get;
+            protected set;
+        }
+
+        public virtual Person Mother
         {
             get;
             protected set;
@@ -102,13 +107,34 @@ namespace ComediaCore.Domain
                 }
                 if (!found)
                 {
-                    child.Parent = this;
-                    this.Children.Add(this);                    
+                    child.Father = this;
+                    this.Children.Add(child);                    
                 }
             }
             
         }
+        public virtual void AddMotherChild(Person child)
+        {
 
+            if (this.Children != null)
+            {
+                bool found = false;
+                foreach (var person in this.Children)
+                {
+                    if (person.Name == this.Name)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    child.Mother = this;
+                    this.Children.Add(child);
+                }
+            }
+
+        }
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
@@ -116,12 +142,12 @@ namespace ComediaCore.Domain
             sb.AppendLine("Person.Name:   " + Name);
             sb.AppendLine("Person.FullName:  " + FullName);
             if(BornPlace != null)
-                sb.AppendLine("Person.Born:      " + BornPlace.ToString());
+                sb.AppendLine("Person.Born:      " + BornPlace.Name);
             else
                 sb.AppendLine("Person.Born:      " );
 
             if (DeadPlace != null)
-                sb.AppendLine("Person.Dead:      " + DeadPlace.ToString());
+                sb.AppendLine("Person.Dead:      " + DeadPlace.Name);
             else
             {
                 sb.AppendLine("Person.Dead:      " );
@@ -138,6 +164,30 @@ namespace ComediaCore.Domain
             {
                 sb.AppendLine("Person.Spouse:      " );
             }
+
+            if(Father != null || Mother != null)
+            {
+                StringBuilder sbParent = new StringBuilder();
+                if(Father != null)
+                {
+                    sbParent.Append(Father.Name);                    
+                }
+                if (Mother != null)
+                {
+                    if(!string.IsNullOrEmpty(sbParent.ToString()))
+                    {
+                        sbParent.Append(", ");
+                    }
+                    sbParent.Append(Mother.Name);
+                }
+                sb.AppendLine("Person.Parent:      " + sbParent.ToString());
+            }
+            else
+            {
+
+            }
+
+
             if (Children.Count > 0)
             {
                 foreach (var child in Children)
@@ -200,7 +250,14 @@ namespace ComediaCore.Domain
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("Place.Id:     " + Id);
             sb.AppendLine("Place.Name: " + Name);
-            
+            foreach (var person in People)
+            {
+                sb.AppendLine("Place.BornPeople: " + person.Name);
+            }
+            foreach (var person in DeadPeople)
+            {
+                sb.AppendLine("Place.DeadPeople: " + person.Name);
+            }
             return sb.ToString();
         }
     }

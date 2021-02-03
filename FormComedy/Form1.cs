@@ -121,9 +121,18 @@ namespace FormComedia
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel2.Dock = DockStyle.Fill;
             panel2.Dock = DockStyle.Fill;
+            panel3.Dock = DockStyle.Fill;
             textBox1.Dock = DockStyle.Fill;
             textBox3.Dock = DockStyle.Fill;
+            _formViewTable.TopLevel = false;
+            var t1 = _formViewTable;
+            t1.FormBorderStyle = FormBorderStyle.None;
+            t1.Dock = DockStyle.Fill;
+            t1.Visible = true;
+            t1.AutoScroll = false;
+            panel3.Controls.Add(t1);
         }
+        FormViewTable _formViewTable = new FormViewTable();
 
         private void buildToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -214,25 +223,17 @@ namespace FormComedia
             virgil.AddPoem(m);
 
 
-            Poet ovid = new Poet
-            {
-                Name = "Ovid",                
-            };
-            Poet lucan = new Poet
-            {
-                Name = "Lucan",
-            };
-            
             DBHelper.save<Poet>(dante);
             DBHelper.save<Poet>(virgil);
-            DBHelper.save<Poet>(ovid);
-            DBHelper.save<Poet>(lucan);
 
             DBHelper.save<Politician>(politician_augustus);
             DBHelper.save<Person>(claudia);
             DBHelper.save<Person>(livia);
             DBHelper.save<Person>(scribonia);
 
+            ComediaBuilder.build_places();
+            ComediaBuilder.build_poets_elite_four();
+            ComediaBuilder.build_characters_aenaes();
             ComediaBuilder.build_politician();
         }
 
@@ -245,6 +246,10 @@ namespace FormComedia
                     var text = textBox1.SelectedText;
                     text = ComediaHelper.TrimUnecessaryCharacters(text);
                     textBoxKey.Text = text;
+                    if(_formViewTable.Visible)
+                    {
+                        _formViewTable.SearchKey = text;
+                    }
                 }
             }
         }

@@ -32,10 +32,15 @@ namespace ComediaCore.Mapping
                 .AsBag()
                 .Cascade.All()
                 ;
-            
-            References(x => x.Parent)
-                .Column("Parent_id")
+
+            References(x => x.Father)
+                .Column("Father_id")
                 .Cascade.All();
+
+            References(x => x.Mother)
+                .Column("Mother_id")
+                .Cascade.All();
+
 
             References(x => x.BornPlace, "BornPlace_id")   
                 .Column("BornPlace_id")

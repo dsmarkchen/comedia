@@ -47,12 +47,12 @@
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(3, 250);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(648, 161);
+            this.dataGridView1.Size = new System.Drawing.Size(490, 161);
             this.dataGridView1.TabIndex = 1;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(332, 32);
+            this.button1.Location = new System.Drawing.Point(243, 30);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 2;
@@ -71,9 +71,9 @@
             "Characters",
             "Poem",
             "Place"});
-            this.comboBox1.Location = new System.Drawing.Point(205, 34);
+            this.comboBox1.Location = new System.Drawing.Point(168, 32);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.Size = new System.Drawing.Size(69, 21);
             this.comboBox1.TabIndex = 3;
             // 
             // textBox1
@@ -82,7 +82,7 @@
             this.textBox1.Location = new System.Drawing.Point(3, 83);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(648, 161);
+            this.textBox1.Size = new System.Drawing.Size(490, 161);
             this.textBox1.TabIndex = 4;
             // 
             // tableLayoutPanel1
@@ -92,13 +92,13 @@
             this.tableLayoutPanel1.Controls.Add(this.dataGridView1, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.textBox1, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(59, 12);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(4, 12);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(654, 414);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(496, 414);
             this.tableLayoutPanel1.TabIndex = 5;
             this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
@@ -110,7 +110,7 @@
             this.panel1.Controls.Add(this.button1);
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(449, 74);
+            this.panel1.Size = new System.Drawing.Size(341, 74);
             this.panel1.TabIndex = 5;
             // 
             // textBoxKey
@@ -133,7 +133,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(534, 450);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "FormViewTable";
             this.Text = "FormViewTable";
