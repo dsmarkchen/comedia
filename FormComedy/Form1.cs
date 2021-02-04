@@ -63,6 +63,8 @@ namespace FormComedia
             int start = int.Parse(textBoxStart.Text);
             int end = int.Parse(textBoxEnd.Text);
             var books = DBHelper.GetAll<Book>();
+            if (books == null) return;
+
             textBox1.Text = "";
             StringBuilder sb = new StringBuilder();
             foreach (var book in books)
@@ -153,7 +155,7 @@ namespace FormComedia
             };
             Person livia = new Person
             {
-                Name = "Livia"
+                Name = "Livia"                
             };
             politician_augustus.AddSpouse(claudia);
             politician_augustus.AddSpouse(scribonia);
@@ -163,78 +165,23 @@ namespace FormComedia
             place_nola.AddPersonDead(politician_augustus);
 
 
-            Poem vn = new Poem
-            {
-                Name = "Vila Nouva"
-            };
-
-            Poet dante = new Poet
-            {
-                Name = "Dante",                
-            };            
-            place_fl.AddPerson(dante);
-
-            dante.AddPoem(vn);
-            Character ch_dante = new Character
-            {
-                Name = "Dante",
-                FullName = "Dante"
-            };
-            Character ch_beatrice = new Character
-            {
-                Name = "Beatrice",
-                FullName = "Beatrice",                
-            };
-            place_fl.AddPerson(ch_dante);
-            place_fl.AddPerson(ch_beatrice);
-
-            vn.AddCharacter(ch_dante);
-            vn.AddCharacter(ch_beatrice);
-
-            Character ch_camilla = new Character
-            {
-                Name = "Camilla"
-            };
-            Character ch_nisus = new Character
-            {
-                Name  = "Nisus"
-            };
-
-
-
-
-            Poem m = new Poem
-            {
-                Name = "Aeneid"
-            };
-            m.AddCharacter(ch_camilla);
-            m.AddCharacter(ch_nisus);
-
-            Place mantuan = new Place
-            {
-                Name = "Mantuan"
-            };
-            Poet virgil = new Poet
-            {
-                Name = "Virgil",
-                BornPlace = mantuan
-            };
-            mantuan.AddPerson(virgil);
-            virgil.AddPoem(m);
-
-
-            DBHelper.save<Poet>(dante);
-            DBHelper.save<Poet>(virgil);
-
+            
+            
             DBHelper.save<Politician>(politician_augustus);
             DBHelper.save<Person>(claudia);
             DBHelper.save<Person>(livia);
             DBHelper.save<Person>(scribonia);
 
             ComediaBuilder.build_places();
-            ComediaBuilder.build_poets_elite_four();
+            ComediaBuilder.build_characters_bible();
+
+            ComediaBuilder.build_poets_elite_six();
             ComediaBuilder.build_characters_aenaes();
+            ComediaBuilder.build_characters_electra();
+            ComediaBuilder.build_characters_minos();
+            ComediaBuilder.build_characters_erinyes(); // three furies
             ComediaBuilder.build_politician();
+            ComediaBuilder.build_characters_comedy();
         }
 
         private void textBox1_MouseUp(object sender, MouseEventArgs e)

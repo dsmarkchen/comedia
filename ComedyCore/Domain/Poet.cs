@@ -25,11 +25,11 @@ namespace ComediaCore.Domain
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine(base.ToString());
+            sb.Append(base.ToString());
 
             if (Story != null)
             {
-                sb.AppendLine(Story.ToString());
+                sb.AppendLine("Character.Story: " + Story.ToString());
             }
             return sb.ToString();
         }
@@ -76,9 +76,9 @@ namespace ComediaCore.Domain
             sb.AppendLine("Poem.Id:     " + Id);
 
             sb.AppendLine("Poem.Name:   " + Name.ToString());
-
-            sb.AppendLine("Poem.Author:   " + Author.Name.ToString());
-
+            if(Author != null) {             
+                  sb.AppendLine("Poem.Author:   " + Author.Name.ToString());                
+            }
             foreach (var character in Characters)
             {
                 sb.AppendLine("Poem.Character: " + character.Name);
@@ -111,7 +111,7 @@ namespace ComediaCore.Domain
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine(base.ToString());
+            sb.Append(base.ToString());
 
             foreach (var poem in Poems)
             {

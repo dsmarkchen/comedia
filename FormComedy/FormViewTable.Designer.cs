@@ -34,8 +34,8 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.textBoxKey = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.textBoxKey = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -68,7 +68,7 @@
             "Poet",
             "Politician",
             "Person",
-            "Characters",
+            "Character",
             "Poem",
             "Place"});
             this.comboBox1.Location = new System.Drawing.Point(168, 32);
@@ -113,13 +113,6 @@
             this.panel1.Size = new System.Drawing.Size(341, 74);
             this.panel1.TabIndex = 5;
             // 
-            // textBoxKey
-            // 
-            this.textBoxKey.Location = new System.Drawing.Point(62, 32);
-            this.textBoxKey.Name = "textBoxKey";
-            this.textBoxKey.Size = new System.Drawing.Size(100, 20);
-            this.textBoxKey.TabIndex = 4;
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -128,6 +121,13 @@
             this.label1.Size = new System.Drawing.Size(44, 13);
             this.label1.TabIndex = 5;
             this.label1.Text = "Search:";
+            // 
+            // textBoxKey
+            // 
+            this.textBoxKey.Location = new System.Drawing.Point(62, 32);
+            this.textBoxKey.Name = "textBoxKey";
+            this.textBoxKey.Size = new System.Drawing.Size(100, 20);
+            this.textBoxKey.TabIndex = 4;
             // 
             // FormViewTable
             // 

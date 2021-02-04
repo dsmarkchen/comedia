@@ -36,6 +36,30 @@ namespace FormComedia
             dataGridView1.DataSource = null;
             var item = (string)comboBox1.SelectedItem;
             switch (item) {
+                case "Character":
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        IList<Character> people;
+                        if (string.IsNullOrEmpty(textBoxKey.Text))
+                            people = DBHelper.GetAll<Character>();
+                        else
+                        {
+                            people = DBHelper.GetAllWithOrRestrictionsStringInsentiveLike<Character>("Name", textBoxKey.Text, "FullName");
+                        }
+
+                        if (people != null)
+                        {
+                            foreach (var itm in people)
+                            {
+                                sb.AppendLine(itm.ToString());
+                            }
+                        }
+
+                        _bs.DataSource = people;
+
+                        textBox1.Text = sb.ToString();
+                    }
+                    break;
                 case "Poet":
                     {
                         StringBuilder sb = new StringBuilder();
