@@ -25,6 +25,11 @@ namespace ComediaCore.Domain
             get;
             set;
         }
+        public virtual string Alias
+        {
+            get;
+            set;
+        }
 
         public virtual string FullName
         {
@@ -217,6 +222,12 @@ namespace ComediaCore.Domain
             get;
             set;
         }
+        public virtual string Alias
+        {
+            get;
+            set;
+        }
+
         public virtual IList<Person> People
         {
             get;

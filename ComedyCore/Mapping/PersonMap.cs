@@ -19,6 +19,8 @@ namespace ComediaCore.Mapping
 
             Map(x => x.FullName);
 
+            Map(x => x.Alias);
+
             HasManyToMany(x => x.Spouse)
                 .ParentKeyColumn("Person_id")
                 .ChildKeyColumn("Spouse_Id")
@@ -64,6 +66,8 @@ namespace ComediaCore.Mapping
 
             Map(x => x.Name)
                 .Not.Nullable();
+
+            Map(x => x.Alias);
 
             HasMany(x => x.People )   
                 .KeyColumn("BornPlace_id")

@@ -46,6 +46,7 @@
     <Compile Include="Domain\Person.cs" />
     <Compile Include="Domain\Poet.cs" />
     <Compile Include="Domain\Politician.cs" />
+    <Compile Include="Domain\Term.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Domain\Canto.cs" />
     <Compile Include="Domain\Line.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="Mapping\PersonMap.cs" />
     <Compile Include="Mapping\PoetMap.cs" />
     <Compile Include="Mapping\PoliticianMap.cs" />
+    <Compile Include="Mapping\TermMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

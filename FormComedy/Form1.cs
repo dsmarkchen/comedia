@@ -28,15 +28,19 @@ namespace FormComedia
         {
             InitializeComponent();            
         }
-
+        public void SetResult(string s)
+        {
+            toolStripStatusLabelResult.Text = s;
+        }
         private void initToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DBHelper.Initdb();
+            var res = DBHelper.Initdb();
+            SetResult("Initdb " + ((res == true) ? "ok" : "fail"));
         }
 
         private void addToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+            bool res = true;
             string file = Path.Combine(AssemblyDirectory, "inferno.txt");
             string purgatorio = Path.Combine(AssemblyDirectory, "purgatorio.txt");
             string paradiso = Path.Combine(AssemblyDirectory, "paradiso.txt");
@@ -53,7 +57,10 @@ namespace FormComedia
             }
             catch (IOException)
             {
+                res = false;
             }
+
+            SetResult("import books: " + ((res == true) ? "ok" : "fail"));
         }
 
         private void buttonGet_Click(object sender, EventArgs e)
@@ -138,50 +145,62 @@ namespace FormComedia
 
         private void buildToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Place place_fl = new Place { Name = "Florence" };
-            Place place_rome = new Place { Name = "Rome" };
-            Place place_nola = new Place { Name = "Nola" };
-            Politician politician_augustus = new Politician
+            bool res = true;
+            try
             {
-                Name = "Augustus"
-            };
-            Person claudia = new Person
+                Place place_fl = new Place { Name = "Florence" };
+                Place place_rome = new Place { Name = "Rome" };
+                Place place_nola = new Place { Name = "Nola" };
+                Politician politician_augustus = new Politician
+                {
+                    Name = "Augustus"
+                };
+                Person claudia = new Person
+                {
+                    Name = "Claudia"
+                };
+                Person scribonia = new Person
+                {
+                    Name = "Scribonia"
+                };
+                Person livia = new Person
+                {
+                    Name = "Livia"
+                };
+                politician_augustus.AddSpouse(claudia);
+                politician_augustus.AddSpouse(scribonia);
+                politician_augustus.AddSpouse(livia);
+
+                place_rome.AddPerson(politician_augustus);
+                place_nola.AddPersonDead(politician_augustus);
+
+
+
+
+                DBHelper.save<Politician>(politician_augustus);
+                DBHelper.save<Person>(claudia);
+                DBHelper.save<Person>(livia);
+                DBHelper.save<Person>(scribonia);
+
+                ComediaBuilder.build_places();
+                ComediaBuilder.build_characters_bible();
+
+                ComediaBuilder.build_poets_elite_six();
+                ComediaBuilder.build_characters_aenaes();
+                ComediaBuilder.build_characters_electra();
+                ComediaBuilder.build_characters_minos();
+                ComediaBuilder.build_characters_erinyes(); // three furies
+                ComediaBuilder.build_politician();
+                ComediaBuilder.build_characters_comedy();
+
+                ComediaBuilder.build_terms();
+                ComediaBuilder.build_metaphors_inferno();
+            }
+            catch(Exception ex)
             {
-                Name = "Claudia"
-            };
-            Person scribonia = new Person
-            {
-                Name = "Scribonia"
-            };
-            Person livia = new Person
-            {
-                Name = "Livia"                
-            };
-            politician_augustus.AddSpouse(claudia);
-            politician_augustus.AddSpouse(scribonia);
-            politician_augustus.AddSpouse(livia);
-
-            place_rome.AddPerson(politician_augustus);
-            place_nola.AddPersonDead(politician_augustus);
-
-
-            
-            
-            DBHelper.save<Politician>(politician_augustus);
-            DBHelper.save<Person>(claudia);
-            DBHelper.save<Person>(livia);
-            DBHelper.save<Person>(scribonia);
-
-            ComediaBuilder.build_places();
-            ComediaBuilder.build_characters_bible();
-
-            ComediaBuilder.build_poets_elite_six();
-            ComediaBuilder.build_characters_aenaes();
-            ComediaBuilder.build_characters_electra();
-            ComediaBuilder.build_characters_minos();
-            ComediaBuilder.build_characters_erinyes(); // three furies
-            ComediaBuilder.build_politician();
-            ComediaBuilder.build_characters_comedy();
+                res = false;
+            }
+            SetResult("build characters: " + ((res == true) ? "ok" : "fail"));
         }
 
         private void textBox1_MouseUp(object sender, MouseEventArgs e)

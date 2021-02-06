@@ -11,6 +11,32 @@ using System.Threading.Tasks;
 
 namespace FormComedia
 {   
+    
+    public class DBUtil<T> 
+    {
+        public IList<T> GetAll()
+        {
+            ISession session = SQLiteSessionManager.GetCurrentSession();
+            var runs = session.CreateCriteria(typeof(T)).List<T>();
+            if (runs.Count > 0)
+                return runs;
+
+            return null;
+        }
+        public IList<T> GetAllWithOrRestrictionsStringInsentiveLike(string name, object value, string name2)
+        {
+            ISession session = SQLiteSessionManager.GetCurrentSession();
+            var runs = session.CreateCriteria(typeof(T))
+                .Add(Restrictions.Or(
+                    Restrictions.InsensitiveLike(name, (string)value, MatchMode.Anywhere),
+                    Restrictions.InsensitiveLike(name2, (string)value, MatchMode.Anywhere)))
+                .List<T>();
+            if (runs.Count > 0)
+                return runs;
+
+            return null;
+        }
+    }
     public class DBHelper
     {
         public static void save<T>(T t)

@@ -392,7 +392,112 @@ namespace FormComedia
                 transaction.Commit();
             }
         }
+        public static void build_terms()
+        {
+            string poets_str = "dante,  virgil,  homer, horice, ovid, lucan";
+            string character_str = "beatrice";
 
+            string[] arr_metaphors = poets_str.Split(',');
+            string[] arr_characters = character_str.Split(',');
+            ISession session1 = SQLiteSessionManager.GetCurrentSession();
+
+            using (ITransaction transaction = session1.BeginTransaction())
+            {
+                for (int i = 0; i < arr_metaphors.Length; i++)
+                {
+                    if (string.IsNullOrEmpty(arr_metaphors[i])) continue;
+
+
+                    var term = new Term
+                    {
+                        Name = arr_metaphors[i].Trim(new char[] { ',', ' ' }),
+
+                    };
+                    term.SetMetaphorItem("category", "poet");
+                    session1.SaveOrUpdate(term);
+                }
+
+                for (int i = 0; i < arr_characters.Length; i++)
+                {
+                    if (string.IsNullOrEmpty(arr_characters[i])) continue;
+
+
+                    var term = new Term
+                    {
+                        Name = arr_characters[i].Trim(new char[] { ',', ' ' }),
+
+                    };
+                    term.SetMetaphorItem("category", "character");
+                    session1.SaveOrUpdate(term);
+                }
+
+                transaction.Commit();
+            }
+        }
+        public static void build_metaphors_inferno()
+        {
+            string metaphor_str =  "wood,  leopard,  lion, she-wolf, dove ";
+            
+            string[] arr_metaphors = metaphor_str.Split(',');
+            ISession session1 = SQLiteSessionManager.GetCurrentSession();
+
+            using (ITransaction transaction = session1.BeginTransaction())
+            {   
+                for (int i = 0; i < arr_metaphors.Length; i++)
+                {
+                    if (string.IsNullOrEmpty(arr_metaphors[i])) continue;
+
+
+                    var term = new Term
+                    {
+                        Name = arr_metaphors[i].Trim(new char[] { ',', ' ' }),
+                    
+                    };
+
+                    session1.SaveOrUpdate(term);
+
+                    
+                }
+                
+                transaction.Commit();
+            }
+            Term wood = DBHelper.GetAllWithRestrictionsEq<Term>("Name", "wood")[0];
+            wood.Alias = "forest";
+
+            Term leopard = DBHelper.GetAllWithRestrictionsEq<Term>("Name", "leopard")[0];
+            Term lion = DBHelper.GetAllWithRestrictionsEq<Term>("Name", "lion")[0];
+            Term shewolf = DBHelper.GetAllWithRestrictionsEq<Term>("Name", "she-wolf")[0];
+            Term dove = DBHelper.GetAllWithRestrictionsEq<Term>("Name", "dove")[0];
+
+            leopard.SetMetaphorItem("sin", "lust");
+            leopard.SetMetaphorItem("trinity", "leopard, lion, she-wolf");
+
+            lion.SetMetaphorItem("sin", "pride");
+            lion.SetMetaphorItem("trinity", "leopard, lion, she-wolf");
+
+            shewolf.Alias = "shewolf";
+            shewolf.SetMetaphorItem("sin", "avarice");
+            shewolf.SetMetaphorItem("trinity", "leopard, lion, she-wolf");
+
+
+            dove.SetMetaphorItem("aphrodite", "love");
+            dove.SetMetaphorItem("christian", "holy spirit");
+
+            session1 = SQLiteSessionManager.GetCurrentSession();
+
+            using (ITransaction transaction = session1.BeginTransaction())
+            {
+                session1.SaveOrUpdate(wood);
+                session1.SaveOrUpdate(leopard);
+                session1.SaveOrUpdate(lion);
+                session1.SaveOrUpdate(shewolf);
+
+                transaction.Commit();
+            }
+
+
+
+        }
 
         public static void build_characters_aenaes()
         {

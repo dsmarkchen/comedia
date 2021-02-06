@@ -50,6 +50,7 @@
     <Compile Include="PoetRepositoryTest.cs" />
     <Compile Include="PoliticianRepositoryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TermRepositoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Antlr3.Runtime">

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -24,6 +25,8 @@ namespace FormComedia
                 textBoxKey.Text = value;
             }
         }
+        
+
         BindingSource _bs = new BindingSource();
         public FormViewTable()
         {
@@ -32,212 +35,62 @@ namespace FormComedia
 
         private void button1_Click(object sender, EventArgs e)
         {
-           // dataGridView1.AutoGenerateColumns = false;
+            // dataGridView1.AutoGenerateColumns = false;
             dataGridView1.DataSource = null;
             var item = (string)comboBox1.SelectedItem;
-            switch (item) {
-                case "Character":
+            string typeString;
+            if (string.IsNullOrEmpty(item))
+                typeString = "Term";
+            else
+                typeString = item;
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (Assembly currentassembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                Console.WriteLine(currentassembly.ToString());
+                if (currentassembly.FullName.Contains("ComediaCore"))
+                {
+                    Type typeArgument = currentassembly.GetType(string.Format("ComediaCore.Domain.{0}", typeString));
+                    Type template = typeof(DBUtil<>);
+                    Type genericType = template.MakeGenericType(typeArgument);
+                    object instance = Activator.CreateInstance(genericType);
+                    IEnumerable<object> items;
+                    if (string.IsNullOrEmpty(textBoxKey.Text))
                     {
-                        StringBuilder sb = new StringBuilder();
-                        IList<Character> people;
-                        if (string.IsNullOrEmpty(textBoxKey.Text))
-                            people = DBHelper.GetAll<Character>();
-                        else
-                        {
-                            people = DBHelper.GetAllWithOrRestrictionsStringInsentiveLike<Character>("Name", textBoxKey.Text, "FullName");
-                        }
-
-                        if (people != null)
-                        {
-                            foreach (var itm in people)
-                            {
-                                sb.AppendLine(itm.ToString());
-                            }
-                        }
-
-                        _bs.DataSource = people;
-
-                        textBox1.Text = sb.ToString();
-                    }
-                    break;
-                case "Poet":
-                    {
-                        StringBuilder sb = new StringBuilder();
-                        IList<Poet> people;
-                        if (string.IsNullOrEmpty(textBoxKey.Text))
-                            people = DBHelper.GetAll<Poet>();
-                        else
-                        {
-                            people = DBHelper.GetAllWithOrRestrictionsStringInsentiveLike<Poet>("Name", textBoxKey.Text, "FullName");
-                        }
-
-                        if (people != null)
-                        {
-                            foreach (var itm in people)
-                            {
-                                sb.AppendLine(itm.ToString());
-                            }
-                        }
-                            
-                        _bs.DataSource = people;
-
-                        textBox1.Text = sb.ToString();
-                    }
-                    break;
-                case "Person":
-                    {
-                        IList<Person> items;
-                        if(string.IsNullOrEmpty(textBoxKey.Text))
-                            items= DBHelper.GetAll<Person>();
-                        else
-                        {
-                            items = DBHelper.GetAllWithOrRestrictionsStringInsentiveLike<Person>("Name", textBoxKey.Text, "FullName");
-                        }
-                        StringBuilder sb = new StringBuilder();
-                        try
-                        {
-                            BindingList<EntityPerson> lst = new BindingList<EntityPerson>();
-                            foreach (var itm in items)
-                            {
-                                sb.AppendLine(itm.ToString());
-                                EntityPerson entity = new EntityPerson
-                                {
-                                    id = itm.Id,
-                                    name = itm.Name,
-                                    fullname = itm.FullName,
-                                };
-                                if (itm.BornPlace != null)
-                                {
-                                    entity.Born = itm.BornPlace.Name;
-                                }
-                                if (itm.DeadPlace != null)
-                                {
-                                    entity.Dead = itm.DeadPlace.Name;
-                                }
-
-                                if (itm.Spouse != null)
-                                {
-                                    foreach (var person in itm.Spouse)
-                                    {
-                                        entity.Spouse += person.Name;
-                                    }
-                                }
-                                if (itm.Children != null)
-                                {
-                                    foreach (var person in itm.Children)
-                                    {
-                                        entity.Spouse += person.Name;
-                                    }
-                                }
-                                if (itm.Father != null)
-                                {
-                                    entity.Parent = itm.Father.Name;
-                                }
-
-
-                                lst.Add(entity);
-                            }
-                            _bs.DataSource = lst;
-                            dataGridView1.DataSource = _bs;
-                        }
-                        catch
-                        {
-
-                        }
-                        textBox1.Text = sb.ToString();
-                    }
-                        break;
-                case "Politician":
-                    {
-                        IList<Politician> people = null;
-
-                        if (string.IsNullOrEmpty(textBoxKey.Text))
-                            people = DBHelper.GetAll<Politician>();
-                        else
-                        {
-
-                        }
-
-                        _bs.DataSource = people.ToList();
-                        
-                        dataGridView1.DataSource =_bs;
-
-
-                        StringBuilder sb = new StringBuilder();
-
-                        foreach (var itm in people)
-                        {
-                            sb.AppendLine(itm.ToString());
-                        }
-                        textBox1.Text = sb.ToString();
+                        MethodInfo method = genericType.GetMethod("GetAll");
+                        items = (IEnumerable<object>)method.Invoke(instance, new object[0]);
 
                     }
-                    break;
-
-                case "Place":
+                    else
                     {
-                        var items = DBHelper.GetAll<Place>();
-                        
-
-                        BindingList<EntityPlace> lst = new BindingList<EntityPlace>();
-                        foreach (var itm in items)
+                        MethodInfo method2 = genericType.GetMethod("GetAllWithOrRestrictionsStringInsentiveLike");
+                        var params_ = new object[3]
                         {
-                            EntityPlace entity = new EntityPlace
-                            {
-                                id = itm.Id,
-                                name = itm.Name,
-
-                            };
-                            if (itm.People != null) {
-                                foreach (var person in itm.People)
-                                {
-                                    entity.Born += person.Name;
-                                }
-                            }
-                            if(itm.DeadPeople != null)
-                            {
-                                foreach (var person in itm.DeadPeople)
-                                {
-                                    entity.Dead += person.Name;
-                                }
-                            }
-
-                            lst.Add(entity);
-                        }
-                        _bs.DataSource = lst;
-                        dataGridView1.DataSource = _bs;
+                                        "Name",
+                                        textBoxKey.Text,
+                                        "Alias"
+                        };
+                        items = (IEnumerable<object>)method2.Invoke(instance, params_);
+                    }
 
 
-                        StringBuilder sb = new StringBuilder();
-
+                    if (items != null)
+                    {
                         foreach (var itm in items)
                         {
                             sb.AppendLine(itm.ToString());
                         }
-                        textBox1.Text = sb.ToString();
-
                     }
-                    break;
 
-                case "Poem":
-                    {
-                        StringBuilder sb = new StringBuilder();
-                        var items = DBHelper.GetAll<Poem>();
-                        foreach (var itm in items)
-                        {
-                            sb.AppendLine(itm.ToString());
-                        }
-                        _bs.DataSource = items;
-                        textBox1.Text = sb.ToString();
-                    }
+
+                    textBox1.Text = sb.ToString();
                     break;
-                default:
-                    break;
+                }
+
+
             }
-            
-
         }
-
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
         {
 
@@ -272,4 +125,32 @@ namespace FormComedia
 
         public string Parent { get; set; }
     };
+
+    public class GenericClass<T>
+    {
+        public static object GetInstance(Type type)
+        {
+            var genericType = typeof(GenericClass<>).MakeGenericType(type);
+            return Activator.CreateInstance(genericType);
+        }
+
+        public static GenericClass<T> GetInstance<T>()
+            where T : class
+        {
+            return new GenericClass<T>();
+        }
+    }
+    public class DbHelperFactory {
+        private  readonly Dictionary<string, Func<object>>  factory = new Dictionary<string, Func<object>>();
+
+        public DbHelperFactory()
+        {
+            factory.Add("Term", () => new List<Term>());
+            factory.Add("Person", () => new List<Person>());
+            factory.Add("Place", () => new List<Place>());
+        }
+            
+    }
+
+    
 }
