@@ -14,7 +14,11 @@ namespace ComediaCore.Mapping
         {
             Id(x => x.Id);
 
-            Map(x => x.Number);
+            Map(x => x.Number)
+                .Default("1");
+
+            Map(x => x.Name);
+            Map(x => x.Alias);
 
             HasMany(x => x.Cantos)
                 .Inverse()

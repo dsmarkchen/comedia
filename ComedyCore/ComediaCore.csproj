@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Domain\Book.cs" />
+    <Compile Include="Domain\Note.cs" />
     <Compile Include="Domain\Person.cs" />
     <Compile Include="Domain\Poet.cs" />
     <Compile Include="Domain\Politician.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="Mapping\BookMap.cs" />
     <Compile Include="Mapping\CantoMap.cs" />
     <Compile Include="Mapping\LineMap.cs" />
+    <Compile Include="Mapping\NoteClassMap.cs" />
     <Compile Include="Mapping\PersonMap.cs" />
     <Compile Include="Mapping\PoetMap.cs" />
     <Compile Include="Mapping\PoliticianMap.cs" />

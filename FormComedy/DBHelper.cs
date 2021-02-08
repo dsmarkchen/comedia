@@ -14,6 +14,32 @@ namespace FormComedia
     
     public class DBUtil<T> 
     {
+        public  void save(T t)
+        {
+
+            ISession session1 = SQLiteSessionManager.GetCurrentSession();
+
+            using (ITransaction transaction = session1.BeginTransaction())
+            {
+                session1.SaveOrUpdate(t);
+
+                transaction.Commit();
+            }
+        }
+
+        public void merge(T t)
+        {
+
+            ISession session1 = SQLiteSessionManager.GetCurrentSession();
+
+            using (ITransaction transaction = session1.BeginTransaction())
+            {
+                session1.Merge(t);
+
+                transaction.Commit();
+            }
+        }
+
         public IList<T> GetAll()
         {
             ISession session = SQLiteSessionManager.GetCurrentSession();

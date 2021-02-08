@@ -392,6 +392,45 @@ namespace FormComedia
                 transaction.Commit();
             }
         }
+        public static void build_notes()
+        {
+            var note1 = new Note
+            {
+                Name = "midway",
+                Alias = "halfway",
+                Commentary = "35 years old, 1300",
+                Loc = new Loc
+                {
+                    Book = "Inferno",
+                    Canto = 1,
+                    Start = 1,
+                    End = 1,
+                }
+                
+            };
+            var note2 = new Note
+            {
+                Name = "wood",
+                Alias = "forest, wildness",
+                Commentary="metaphor",
+                Loc = new Loc
+                {
+                    Book = "Inferno",
+                    Canto = 1,
+                    Start = 2,
+                    End = 2,
+                }
+
+            };
+            ISession session1 = SQLiteSessionManager.GetCurrentSession();
+
+            using (ITransaction transaction = session1.BeginTransaction())
+            {
+                session1.SaveOrUpdate(note1);
+                session1.SaveOrUpdate(note2);
+                transaction.Commit();
+            }
+        }
         public static void build_terms()
         {
             string poets_str = "dante,  virgil,  homer, horice, ovid, lucan";

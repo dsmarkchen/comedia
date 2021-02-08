@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using NHibernate.Criterion;
 
 namespace FormComedia
 {
@@ -94,6 +95,22 @@ namespace FormComedia
                 }
             }
             textBox1.Text = sb.ToString();
+            search_notes(bookNumber, cantoNumber, start, end);
+        }
+
+        private void search_notes(int book, int canto, int start, int end)
+        {
+            ISession session = SQLiteSessionManager.GetCurrentSession();
+            {
+               
+                using (session.BeginTransaction())
+                {
+                    var resnotes = session.CreateCriteria(typeof(Note))
+                            .Add(Restrictions.Eq("Loc.Start", 2))
+                            .List<Note>();
+                   
+                }
+            }
         }
 
         private void buttonNext_Click(object sender, EventArgs e)
@@ -126,6 +143,7 @@ namespace FormComedia
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            flowLayoutPanel1.Dock = Dock;
             tableLayoutPanel4.Dock = DockStyle.Fill;
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel2.Dock = DockStyle.Fill;
@@ -195,6 +213,7 @@ namespace FormComedia
 
                 ComediaBuilder.build_terms();
                 ComediaBuilder.build_metaphors_inferno();
+                ComediaBuilder.build_notes();
             }
             catch(Exception ex)
             {
@@ -224,37 +243,16 @@ namespace FormComedia
         {
             StringBuilder sb = new StringBuilder();
             var key_word = textBoxKey.Text;
-            var poets = DBHelper.GetAllWithRestrictionsInsentiveLike<Poet>("Name", key_word);
-            if(poets != null && poets.Count > 0)
-            {   
-                sb.AppendLine("Poet" + " " +  poets[0].ToString());
-                if (poets[0].Poems != null &&  poets[0].Poems.Count > 0)
-                {
-                    sb.AppendLine("  Poem " + poets[0].Poems[0].ToString());
-                }
-            }
-
-            var poems = DBHelper.GetAllWithRestrictionsInsentiveLike<Poem>("Name", key_word);
-            if (poems != null && poems.Count > 0)
+            DBUtil<Note> dBUtil = new DBUtil<Note>();
+            var notes = dBUtil.GetAll();
+            foreach(var note in notes)
             {
-                sb.AppendLine("Poem" + " " + poems[0].Name);
-                sb.AppendLine("  Auther " + poems[0].Author.ToString());
-
+                sb.AppendLine(note.Name);
+                sb.AppendLine(note.Commentary);
             }
-
-            var characters = DBHelper.GetAllWithRestrictionsLike<Character>("Name", key_word);
-            if (characters != null && characters.Count > 0)
-            {
-                sb.AppendLine("Charactor" + " " + characters[0].ToString());
-                if (characters[0].Poem != null)
-                {
-                    sb.AppendLine("  Poem " + characters[0].Poem.ToString());
-                }
-
-
-            }
-            var xxx = DBHelper.GetAll<Person>();
             textBox3.Text = sb.ToString();
+
+                    
         }
 
         private void summeryToolStripMenuItem_Click(object sender, EventArgs e)
@@ -305,6 +303,57 @@ namespace FormComedia
             FormViewTable x = new FormViewTable();
             x.Icon = this.Icon;
             x.ShowDialog();
+        }
+
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ISession session = SQLiteSessionManager.GetCurrentSession();
+            {
+
+                using (session.BeginTransaction())
+                {
+                    var resnotes = session.CreateCriteria(typeof(Note))
+                            .List<Note>();
+                    
+                    System.Xml.Serialization.XmlSerializer writer =
+                        new System.Xml.Serialization.XmlSerializer(typeof(List<Note>));
+                    var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//ComediaNotes.xml";
+                    System.IO.FileStream file = System.IO.File.Create(path);
+
+                    writer.Serialize(file, resnotes);
+                    file.Close();
+                }
+            }
+        }
+
+        private void importToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//ComediaNotes.xml";
+            string input_string = File.ReadAllText(path);
+            System.Xml.Serialization.XmlSerializer serializer =
+                        new System.Xml.Serialization.XmlSerializer(typeof(List<Note>));
+
+            StringReader reader = new StringReader(input_string);
+            var resnotes = (List<Note>)serializer.Deserialize(reader);
+
+            ISession session = SQLiteSessionManager.GetCurrentSession();
+            using (ITransaction transaction = session.BeginTransaction())
+
+            {
+                foreach (var note in resnotes)
+                {
+                    session.Merge(note);
+                   
+                }
+                transaction.Commit();
+
+            }
+        }
+
+        private void managementToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormNotes formNotes = new FormNotes();
+            formNotes.Show();
         }
     }
 
