@@ -10,6 +10,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using NHibernate.Criterion;
+using System.Drawing;
+using System.Runtime.Serialization;
+using System.Xml;
+using Newtonsoft.Json;
 
 namespace FormComedia
 {
@@ -142,13 +146,14 @@ namespace FormComedia
         }
 
         private void Form1_Load(object sender, EventArgs e)
-        {
-            flowLayoutPanel1.Dock = Dock;
+        {            
+            Icon = Icon.FromHandle(Properties.Resources.book_icon.GetHicon());
             tableLayoutPanel4.Dock = DockStyle.Fill;
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel2.Dock = DockStyle.Fill;
             panel2.Dock = DockStyle.Fill;
             panel3.Dock = DockStyle.Fill;
+            panel4.Dock = DockStyle.Fill;
             textBox1.Dock = DockStyle.Fill;
             textBox3.Dock = DockStyle.Fill;
             _formViewTable.TopLevel = false;
@@ -158,8 +163,16 @@ namespace FormComedia
             t1.Visible = true;
             t1.AutoScroll = false;
             panel3.Controls.Add(t1);
+
+            _formNotes.TopLevel = false;
+            _formNotes.FormBorderStyle = FormBorderStyle.None;
+            _formNotes.Dock = DockStyle.Fill;
+            _formNotes.Visible = true;
+            _formNotes.AutoScroll = false;
+            panel4.Controls.Add(_formNotes);
         }
         FormViewTable _formViewTable = new FormViewTable();
+        FormNotes _formNotes = new FormNotes();
 
         private void buildToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -307,6 +320,8 @@ namespace FormComedia
 
         private void exportToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//ComediaNotes.json";
+
             ISession session = SQLiteSessionManager.GetCurrentSession();
             {
 
@@ -314,39 +329,43 @@ namespace FormComedia
                 {
                     var resnotes = session.CreateCriteria(typeof(Note))
                             .List<Note>();
-                    
-                    System.Xml.Serialization.XmlSerializer writer =
-                        new System.Xml.Serialization.XmlSerializer(typeof(List<Note>));
-                    var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//ComediaNotes.xml";
-                    System.IO.FileStream file = System.IO.File.Create(path);
 
-                    writer.Serialize(file, resnotes);
-                    file.Close();
+                    using (StreamWriter sw = new StreamWriter(path))
+                    {
+                        foreach (var note in resnotes)
+                        {
+                            string x = JsonConvert.SerializeObject(note);
+                            sw.WriteLine(x);
+                        }
+
+                    }
+
                 }
             }
         }
 
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//ComediaNotes.xml";
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//ComediaNotes.json";
             string input_string = File.ReadAllText(path);
-            System.Xml.Serialization.XmlSerializer serializer =
-                        new System.Xml.Serialization.XmlSerializer(typeof(List<Note>));
 
-            StringReader reader = new StringReader(input_string);
-            var resnotes = (List<Note>)serializer.Deserialize(reader);
-
-            ISession session = SQLiteSessionManager.GetCurrentSession();
-            using (ITransaction transaction = session.BeginTransaction())
-
+            JsonSerializer serializer = new JsonSerializer();
+            
+            using (StreamReader sr = new StreamReader(path))
             {
-                foreach (var note in resnotes)
+                ISession session = SQLiteSessionManager.GetCurrentSession();
+                using (ITransaction transaction = session.BeginTransaction())
                 {
-                    session.Merge(note);
-                   
-                }
-                transaction.Commit();
 
+                    while (sr.Peek() >= 0)
+                    {
+                        var jsonString = sr.ReadLine();
+                        var resnote = JsonConvert.DeserializeObject<Note>(jsonString);
+                        session.Merge(resnote);
+                    }
+
+                    transaction.Commit();
+                }
             }
         }
 

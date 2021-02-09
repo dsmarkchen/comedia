@@ -42,9 +42,19 @@ namespace ComediaCore.Domain
 
         public virtual IDictionary<string, TermItem> TermItems { get; set; }
 
+        public virtual IList<Note> Notes { get; set; }
+        public virtual void AddNote(Note note)
+        {
+            note.Term = this;
+            Notes.Add(note);
+            
+        }
+
+
         public Term()
         {
             TermItems = new Dictionary<string, TermItem>();
+            Notes = new List<Note>();
         }
 
         public override string ToString()

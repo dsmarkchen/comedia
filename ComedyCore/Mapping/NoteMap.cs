@@ -27,6 +27,9 @@ namespace ComediaCore.Mapping
                   m.Map(X => X.End);
                   m.Map(x => x.Pos);
               });
+
+            References(x => x.Term, "TermId")
+                .Cascade.All();
         }
     }
 }

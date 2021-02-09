@@ -23,6 +23,10 @@ namespace ComediaCore.Mapping
                 .AsMap(x => x.Type)
                 .Cascade.All();
 
+            HasMany(x => x.Notes)
+                .KeyColumn("TermId")
+                .Inverse().Cascade.All();
+
 
         }
     }

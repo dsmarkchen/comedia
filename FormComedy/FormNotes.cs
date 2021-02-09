@@ -16,24 +16,28 @@ namespace FormComedia
     public partial class FormNotes : Form
     {
         private readonly DBUtil<Note> dBUtilNote = new DBUtil<Note>();
+        private readonly BindingSource _bs = new BindingSource();
         public FormNotes()
         {
             InitializeComponent();
         }
+        
 
         private void buttonRead_Click(object sender, EventArgs e)
         {
             IList< Note >  xxx = dBUtilNote.GetAll();
-            
+        
 
             DataTable dt = xxxhelper<Note>.ToDataTable(xxx.ToList());
+            _bs.DataSource = dt;
 
             dt.Columns.Add("Book", typeof(System.String));
             dt.Columns.Add("Canto", typeof(System.Int32));
             dt.Columns.Add("Start", typeof(System.Int32));
             dt.Columns.Add("End", typeof(System.Int32));
 
-            dataGridView1.DataSource = dt;
+            
+            dataGridView1.DataSource = _bs;
 
             foreach(DataRow dr in dt.Rows)
             {
@@ -48,6 +52,7 @@ namespace FormComedia
         {
             this.dataGridView1.Columns["Id"].Visible = false;
             this.dataGridView1.Columns["Loc"].Visible = false;
+            this.dataGridView1.Columns["Term"].Visible = false;
         }
 
         private void buttonAdd_Click(object sender, EventArgs e)
@@ -71,6 +76,26 @@ namespace FormComedia
             };
             dBUtilNote.save(note);
             
+        }
+
+        private void FormNotes_Load(object sender, EventArgs e)
+        {
+            tableLayoutPanel2.Dock = DockStyle.Fill;
+            dataGridView1.Dock = DockStyle.Fill;
+
+        }
+
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+            DataTable dt = (DataTable )_bs.DataSource;
+            foreach (DataRow dr in dt.Rows)
+            {
+                Console.WriteLine(dr["Id"]);
+                Console.WriteLine(dr["Name"]);
+                Console.WriteLine(dr["Commentary"]);
+                Console.WriteLine(dr["Book"]);
+            }
+
         }
     }
 

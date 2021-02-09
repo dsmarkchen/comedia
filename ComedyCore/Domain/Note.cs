@@ -37,7 +37,11 @@ namespace ComediaCore.Domain
             get;
             set;
         }
-
+        public virtual Term Term
+        {
+            get;
+            set;
+        }
         public override string ToString()
         {
             return Commentary;

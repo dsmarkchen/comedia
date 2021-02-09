@@ -46,6 +46,7 @@
     <Compile Include="LineRepositoryTest.cs" />
     <Compile Include="InMemorySqlLiteSessionFactory.cs" />
     <Compile Include="NoteRepositoryTest.cs" />
+    <Compile Include="NoteTermRepositoryTest.cs" />
     <Compile Include="PersonRepositoryTest.cs" />
     <Compile Include="PlaceRepositoryTest.cs" />
     <Compile Include="PoetRepositoryTest.cs" />
