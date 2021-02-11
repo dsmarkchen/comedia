@@ -51,6 +51,8 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.buttonSave = new System.Windows.Forms.Button();
+            this.buttonExport = new System.Windows.Forms.Button();
+            this.buttonImport = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -258,12 +260,14 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.buttonImport);
+            this.panel2.Controls.Add(this.buttonExport);
             this.panel2.Controls.Add(this.buttonSave);
             this.panel2.Controls.Add(this.buttonRead);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel2.Location = new System.Drawing.Point(3, 3);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(200, 42);
+            this.panel2.Size = new System.Drawing.Size(503, 42);
             this.panel2.TabIndex = 16;
             // 
             // buttonSave
@@ -275,6 +279,26 @@
             this.buttonSave.Text = "Save";
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            // 
+            // buttonExport
+            // 
+            this.buttonExport.Location = new System.Drawing.Point(198, 3);
+            this.buttonExport.Name = "buttonExport";
+            this.buttonExport.Size = new System.Drawing.Size(75, 23);
+            this.buttonExport.TabIndex = 15;
+            this.buttonExport.Text = "Export";
+            this.buttonExport.UseVisualStyleBackColor = true;
+            this.buttonExport.Click += new System.EventHandler(this.buttonExport_Click);
+            // 
+            // buttonImport
+            // 
+            this.buttonImport.Location = new System.Drawing.Point(299, 3);
+            this.buttonImport.Name = "buttonImport";
+            this.buttonImport.Size = new System.Drawing.Size(75, 23);
+            this.buttonImport.TabIndex = 16;
+            this.buttonImport.Text = "Import";
+            this.buttonImport.UseVisualStyleBackColor = true;
+            this.buttonImport.Click += new System.EventHandler(this.buttonImport_Click);
             // 
             // FormNotes
             // 
@@ -320,5 +344,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button buttonSave;
+        private System.Windows.Forms.Button buttonImport;
+        private System.Windows.Forms.Button buttonExport;
     }
 }

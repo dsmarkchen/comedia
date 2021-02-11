@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -42,6 +43,7 @@ namespace ComediaCore.Domain
 
         public virtual IDictionary<string, TermItem> TermItems { get; set; }
 
+        [JsonIgnore]
         public virtual IList<Note> Notes { get; set; }
         public virtual void AddNote(Note note)
         {
@@ -68,6 +70,13 @@ namespace ComediaCore.Domain
                 foreach (var item in TermItems)
                 {
                     sb.AppendLine("Term.TermItem:      " + item.ToString());
+                }
+            }
+            if(Notes != null)
+            {
+                foreach (var item in Notes)
+                {
+                    sb.AppendLine("Term.Note:      " + item.Loc.ToString());
                 }
             }
             return sb.ToString();

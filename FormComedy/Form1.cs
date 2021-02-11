@@ -14,6 +14,7 @@ using System.Drawing;
 using System.Runtime.Serialization;
 using System.Xml;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace FormComedia
 {
@@ -99,23 +100,20 @@ namespace FormComedia
                 }
             }
             textBox1.Text = sb.ToString();
-            search_notes(bookNumber, cantoNumber, start, end);
+       
+            var bookName = "Inferno";
+            if(bookNumber == 2)
+            {
+                bookName = "Purgatorio";
+            }
+            if (bookNumber == 3)
+            {
+                bookName = "Paradiso";
+            }
+            loadNotes(bookName, cantoNumber, start, end);
         }
 
-        private void search_notes(int book, int canto, int start, int end)
-        {
-            ISession session = SQLiteSessionManager.GetCurrentSession();
-            {
-               
-                using (session.BeginTransaction())
-                {
-                    var resnotes = session.CreateCriteria(typeof(Note))
-                            .Add(Restrictions.Eq("Loc.Start", 2))
-                            .List<Note>();
-                   
-                }
-            }
-        }
+       
 
         private void buttonNext_Click(object sender, EventArgs e)
         {
@@ -146,11 +144,16 @@ namespace FormComedia
         }
 
         private void Form1_Load(object sender, EventArgs e)
-        {            
+        {
+            
             Icon = Icon.FromHandle(Properties.Resources.book_icon.GetHicon());
             tableLayoutPanel4.Dock = DockStyle.Fill;
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel2.Dock = DockStyle.Fill;
+            tableLayoutPanelNotesContainer.Dock = DockStyle.Fill;
+            flowLayoutPanelNotes.Dock = DockStyle.Fill;
+            textBoxNoteInfo.Dock = DockStyle.Fill;
+
             panel2.Dock = DockStyle.Fill;
             panel3.Dock = DockStyle.Fill;
             panel4.Dock = DockStyle.Fill;
@@ -162,17 +165,25 @@ namespace FormComedia
             t1.Dock = DockStyle.Fill;
             t1.Visible = true;
             t1.AutoScroll = false;
-            panel3.Controls.Add(t1);
+            formNoteAdd.TopLevel = false;
+            formNoteAdd.FormBorderStyle = FormBorderStyle.None;
+            formNoteAdd.Dock = DockStyle.Fill;
+            formNoteAdd.Visible = true;
+            formNoteAdd.AutoScroll = false;
+            panel3.Controls.Add(formNoteAdd);
 
-            _formNotes.TopLevel = false;
+            /*_formNotes.TopLevel = false;
             _formNotes.FormBorderStyle = FormBorderStyle.None;
             _formNotes.Dock = DockStyle.Fill;
             _formNotes.Visible = true;
             _formNotes.AutoScroll = false;
             panel4.Controls.Add(_formNotes);
+            */
+           // loadNotes("Inferno", 1, 1, 18);
         }
         FormViewTable _formViewTable = new FormViewTable();
         FormNotes _formNotes = new FormNotes();
+        FormNoteAdd formNoteAdd = new FormNoteAdd();
 
         private void buildToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -248,6 +259,19 @@ namespace FormComedia
                     {
                         _formViewTable.SearchKey = text;
                     }
+                    if(formNoteAdd.Visible)
+                    {
+                        var booknum = int.Parse(textBoxBook.Text);
+                        var cantonum = int.Parse(textBoxCanto.Text);
+
+                        var linenum = textBox1.GetLineFromCharIndex(textBox1.SelectionStart);
+                        
+                        int modnum = linenum / 4;
+                        var start = int.Parse(textBoxStart.Text);
+                        var pos = start + linenum - modnum;
+                        formNoteAdd.SetNoteName(text);
+                        formNoteAdd.SetLocStartEnd(booknum, cantonum, pos, pos);
+                    }
                 }
             }
         }
@@ -259,15 +283,59 @@ namespace FormComedia
             DBUtil<Note> dBUtil = new DBUtil<Note>();
             var notes = dBUtil.GetAll();
             foreach(var note in notes)
-            {
-                sb.AppendLine(note.Name);
+            {                
                 sb.AppendLine(note.Commentary);
             }
             textBox3.Text = sb.ToString();
 
                     
         }
+        void btn_click(object sender, EventArgs e)
+        {
+            Term term = (Term)(((Button)sender).Tag);
+            if(term != null)
+                textBoxNoteInfo.Text = term.ToString();
+                
+         }
+        public void loadNotes(string book, int canto, int begin, int end)
+        {
+            DBUtil<Note> dBUtil = new DBUtil<Note>();
+            try
+            {
+                var notes = dBUtil.GetAllWithRestrictionsLoc("Loc.Book", "Loc.Canto", "Loc.Start", "Loc.End", 
+                    book, canto, begin, end);
+                if (notes == null) return;
 
+                flowLayoutPanelNotes.Controls.Clear();
+                foreach (var note in notes)
+                {
+                    Button btn = new Button
+                    {
+                        
+                    };
+                    btn.Click += new System.EventHandler(this.btn_click);
+                    btn.Text = note.Name;
+                    if(note.Term != null)
+                    {
+                        if(!string.IsNullOrEmpty(note.Term.Name))
+                        {
+                            if(string.IsNullOrEmpty(btn.Text))
+                                btn.Text = note.Term.Name;
+                            btn.Tag = note.Term;
+                            if(note.Commentary != null)
+                                btn.SetToolTip(note.Commentary);
+                        }
+                    }
+
+                    flowLayoutPanelNotes.Controls.Add(btn);
+
+                }
+            }
+            catch
+            {
+
+            }
+        }
         private void summeryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             StringBuilder sb = new StringBuilder();
@@ -334,7 +402,11 @@ namespace FormComedia
                     {
                         foreach (var note in resnotes)
                         {
-                            string x = JsonConvert.SerializeObject(note);
+                            string x = JsonConvert.SerializeObject(note, new JsonSerializerSettings()
+                            {
+                                ContractResolver = new NHibernateContractResolver()
+                            });
+                            
                             sw.WriteLine(x);
                         }
 
@@ -361,6 +433,15 @@ namespace FormComedia
                     {
                         var jsonString = sr.ReadLine();
                         var resnote = JsonConvert.DeserializeObject<Note>(jsonString);
+                        if(resnote.Term != null)
+                        {
+                            Term term = DBHelper.GetAllWithRestrictionsEq<Term>("Name", resnote.Term.Name)[0];
+                            term.AddNote(resnote);
+                            DBUtil<Term> dBUtilTerm = new DBUtil<Term>();
+                            dBUtilTerm.save(term);
+
+                        }
+
                         session.Merge(resnote);
                     }
 
@@ -373,6 +454,135 @@ namespace FormComedia
         {
             FormNotes formNotes = new FormNotes();
             formNotes.Show();
+        }
+
+        private void exportToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            bool res = true;
+
+            // Export Notes            
+            ISession session = SQLiteSessionManager.GetCurrentSession();
+            using (session.BeginTransaction())
+            {
+                var resnotes = session.CreateCriteria(typeof(Note))
+                        .List<Note>();
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//ComediaNotes.json";
+                using (StreamWriter sw = new StreamWriter(path))
+                {
+                    foreach (var note in resnotes)
+                    {
+                        string x = JsonConvert.SerializeObject(note, new JsonSerializerSettings()
+                        {
+                            ContractResolver = new NHibernateContractResolver()
+                        });
+
+                        sw.WriteLine(x);
+                    }
+
+                }
+
+            }
+
+            // Export Terms
+            session = SQLiteSessionManager.GetCurrentSession();
+            using (session.BeginTransaction())
+            {
+                var resterms = session.CreateCriteria(typeof(Term))
+                        .List<Term>();
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//ComediaTerms.json";
+                using (StreamWriter sw = new StreamWriter(path))
+                {
+                    foreach (var term in resterms)
+                    {
+                        string x = JsonConvert.SerializeObject(term, new JsonSerializerSettings()
+                        {
+                            ContractResolver = new NHibernateContractResolver()
+                        });
+
+                        sw.WriteLine(x);
+                    }
+
+                }
+
+            }
+            SetResult("export: " + ((res == true) ? "ok" : "fail"));
+        }
+
+        private void importToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            // Import term first
+            {
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//ComediaTerms.json";
+
+                using (StreamReader sr = new StreamReader(path))
+                {
+                    ISession session = SQLiteSessionManager.GetCurrentSession();
+
+                    while (sr.Peek() >= 0)
+                    {
+                        var jsonString = sr.ReadLine();
+                        var resnote = JsonConvert.DeserializeObject<Term>(jsonString);
+                        using (ITransaction transaction = session.BeginTransaction())
+                        {
+                            resnote.Id = 0;
+                            
+
+
+                            session.SaveOrUpdate(resnote);
+                            transaction.Commit();
+
+                        }
+                    }
+
+                    
+                }
+            }
+            {
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//ComediaNotes.json";
+
+                using (StreamReader sr = new StreamReader(path))
+                {
+                    while (sr.Peek() >= 0)
+                    {
+                        var jsonString = sr.ReadLine();
+                        var resnote = JsonConvert.DeserializeObject<Note>(jsonString);
+                        resnote.Id = 0;
+                        ISession session = SQLiteSessionManager.GetCurrentSession();
+                        using (ITransaction transaction = session.BeginTransaction())
+                        {
+                            if (resnote.Term != null)
+                            {
+                                Term term = DBHelper.GetAllWithRestrictionsEq<Term>("Name", resnote.Term.Name)[0];
+                                term.AddNote(resnote);
+                                session.SaveOrUpdate(term);
+                            }
+
+
+                            session.SaveOrUpdate(resnote);
+                            transaction.Commit();
+                        }
+
+
+                    }
+                }
+            }
+        }
+    }
+    public class NHibernateContractResolver : DefaultContractResolver
+    {
+        protected override JsonContract CreateContract(Type objectType)
+        {
+            if (typeof(NHibernate.Proxy.INHibernateProxy).IsAssignableFrom(objectType))
+                return base.CreateContract(objectType.BaseType);
+            else
+                return base.CreateContract(objectType);
+        }
+    }
+    public static class comediahelperUtilExtention
+    {
+        public static void SetToolTip(this Control control, string txt)
+        {
+            new ToolTip().SetToolTip(control, txt);
         }
     }
 

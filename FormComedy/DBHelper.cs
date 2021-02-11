@@ -49,6 +49,23 @@ namespace FormComedia
 
             return null;
         }
+        public IList<T> GetAllWithRestrictionsLoc(string bookName, string cantoName, string beginName, string endName, string book, int canto, int begin, int end)
+        {
+            ISession session = SQLiteSessionManager.GetCurrentSession();
+            var runs = session.CreateCriteria(typeof(T))
+                .Add(Restrictions.And(Restrictions.Eq(cantoName, canto),
+                        Restrictions.Eq(bookName, book)))
+                .Add(Restrictions.And(Restrictions.Le(endName, end),
+                        Restrictions.Ge(beginName, begin)))
+                .List<T>();
+
+            if (runs.Count > 0)
+                return runs;
+
+            return null;
+        }
+
+
         public IList<T> GetAllWithOrRestrictionsStringInsentiveLike(string name, object value, string name2)
         {
             ISession session = SQLiteSessionManager.GetCurrentSession();

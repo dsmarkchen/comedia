@@ -13,14 +13,12 @@ namespace ComediaCore.Domain
             get;
             set;
         }
-
-        public virtual string Name
+        public virtual Loc Loc
         {
             get;
             set;
         }
-
-        public virtual string Alias
+        public virtual string Name
         {
             get;
             set;
@@ -32,11 +30,7 @@ namespace ComediaCore.Domain
             set;
         }
 
-        public virtual Loc Loc
-        {
-            get;
-            set;
-        }
+       
         public virtual Term Term
         {
             get;
@@ -44,7 +38,11 @@ namespace ComediaCore.Domain
         }
         public override string ToString()
         {
-            return Commentary;
+            StringBuilder sb = new StringBuilder();
+            sb.Append(Loc.ToString());
+            sb.AppendLine("Note.Name:" + Name);
+            sb.AppendLine("Note Comment: " + Commentary);
+            return sb.ToString();
         }
     }
 
@@ -60,6 +58,13 @@ namespace ComediaCore.Domain
         {
             get;
             set;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Loc: " +  Book + " " + Canto + " " + Start+  " " + End );            
+            return sb.ToString();
         }
     }
 }

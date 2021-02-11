@@ -58,6 +58,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormNoteAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormNoteAdd.Designer.cs">
+      <DependentUpon>FormNoteAdd.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormNotes.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -75,6 +81,9 @@
     <Compile Include="SQLiteSessionManager.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormNoteAdd.resx">
+      <DependentUpon>FormNoteAdd.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormNotes.resx">
       <DependentUpon>FormNotes.cs</DependentUpon>

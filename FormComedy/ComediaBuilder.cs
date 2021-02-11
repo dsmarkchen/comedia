@@ -394,11 +394,10 @@ namespace FormComedia
         }
         public static void build_notes()
         {
-            var note1 = new Note
+            var midway = new Note
             {
                 Name = "midway",
-                Alias = "halfway",
-                Commentary = "35 years old, 1300",
+                Commentary = "Dante was 35 years old, 1300 C.E.",
                 Loc = new Loc
                 {
                     Book = "Inferno",
@@ -408,11 +407,9 @@ namespace FormComedia
                 }
                 
             };
-            var note2 = new Note
-            {
+            var forest = new Note
+            {   
                 Name = "wood",
-                Alias = "forest, wildness",
-                Commentary="metaphor",
                 Loc = new Loc
                 {
                     Book = "Inferno",
@@ -422,12 +419,38 @@ namespace FormComedia
                 }
 
             };
+            Term wood = DBHelper.GetAllWithRestrictionsEq<Term>("Name", "wood")[0];
+            if(wood != null)
+            {
+                wood.AddNote(forest);
+            }
+
+            var leopardNote = new Note
+            {                
+                Loc = new Loc
+                {
+                    Book = "Inferno",
+                    Canto = 1,
+                    Start = 33,
+                    End = 33,
+                }
+            };
+            Term leopard = DBHelper.GetAllWithRestrictionsEq<Term>("Name", "leopard")[0];
+            leopard.AddNote(leopardNote);
+
             ISession session1 = SQLiteSessionManager.GetCurrentSession();
 
             using (ITransaction transaction = session1.BeginTransaction())
             {
-                session1.SaveOrUpdate(note1);
-                session1.SaveOrUpdate(note2);
+                session1.SaveOrUpdate(midway);
+                session1.SaveOrUpdate(forest);
+
+                session1.SaveOrUpdate(leopard);
+                if(wood!=null)
+                {
+                    session1.SaveOrUpdate(wood);
+                }
+                session1.SaveOrUpdate(leopardNote);
                 transaction.Commit();
             }
         }

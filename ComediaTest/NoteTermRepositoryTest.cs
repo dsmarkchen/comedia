@@ -73,16 +73,13 @@ namespace ComediaTest
 
             Note note = new Note
             {
-                Name = "wood",
-                Alias = "forest",
-                Commentary = "Life span is 70 years, at the midpoint is 1300 CE, Dante was 35 years old."
-            };
-            note.Loc = new Loc
-            {
-                Book = "Inferno",
-                Canto = 1,
-                Start = 2,
-                End = 2
+                Loc = new Loc
+                 {
+                     Book = "Inferno",
+                     Canto = 1,
+                     Start = 2,
+                     End = 2
+                 }
             };
 
             Term wildness = new Term
@@ -91,6 +88,7 @@ namespace ComediaTest
                 Alias = "forest,wildness"
             };
             wildness.AddNote(note);
+            wildness.SetMetaphorItem("metaphor", "");
 
             session = sqliteSessionFactory.Session;
             {

@@ -13,21 +13,19 @@ namespace ComediaCore.Mapping
         public NoteMap()
         {
             Id(x => x.Id);
+            
+            Component(x => x.Loc, m =>
+            {
+                m.Map(x => x.Book);
+                m.Map(x => x.Canto);
+                m.Map(x => x.Start);
+                m.Map(X => X.End);
+                m.Map(x => x.Pos);
+            });
 
             Map(x => x.Name);
-            Map(x => x.Alias);
-
             Map(x => x.Commentary);
-
-            Component(x => x.Loc, m =>
-              {
-                  m.Map(x => x.Book);
-                  m.Map(x => x.Canto);
-                  m.Map(x => x.Start);
-                  m.Map(X => X.End);
-                  m.Map(x => x.Pos);
-              });
-
+                       
             References(x => x.Term, "TermId")
                 .Cascade.All();
         }

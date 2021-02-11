@@ -1,11 +1,13 @@
 ﻿using ComediaCore.Domain;
 using ComediaCore.Helper;
+using Newtonsoft.Json;
 using NHibernate;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,13 +23,9 @@ namespace FormComedia
         {
             InitializeComponent();
         }
-        
 
-        private void buttonRead_Click(object sender, EventArgs e)
+        private void load(IList<Note> xxx)
         {
-            IList< Note >  xxx = dBUtilNote.GetAll();
-        
-
             DataTable dt = xxxhelper<Note>.ToDataTable(xxx.ToList());
             _bs.DataSource = dt;
 
@@ -35,17 +33,28 @@ namespace FormComedia
             dt.Columns.Add("Canto", typeof(System.Int32));
             dt.Columns.Add("Start", typeof(System.Int32));
             dt.Columns.Add("End", typeof(System.Int32));
+            dt.Columns.Add("Name", typeof(System.String));
 
-            
             dataGridView1.DataSource = _bs;
 
-            foreach(DataRow dr in dt.Rows)
+            foreach (DataRow dr in dt.Rows)
             {
                 dr["Book"] = ((Loc)(dr["Loc"])).Book;
                 dr["Canto"] = ((Loc)(dr["Loc"])).Canto;
                 dr["Start"] = ((Loc)(dr["Loc"])).Start;
                 dr["End"] = ((Loc)(dr["Loc"])).End;
+                if (dr["Term"] != DBNull.Value)
+                {
+                    dr["Name"] = ((Term)dr["Term"]).Name;
+                }
             }
+        }
+        
+
+        private void buttonRead_Click(object sender, EventArgs e)
+        {
+            IList< Note >  xxx = dBUtilNote.GetAll();
+            load(xxx);            
         }
 
         private void dataGridView1_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
@@ -63,8 +72,7 @@ namespace FormComedia
                 bookName = textBoxBook.Text;
             }
             Note note = new Note
-            {
-                Name = textBoxName.Text,
+            {                
                 Commentary = textBoxCommentary.Text
             };
             note.Loc = new Loc
@@ -97,7 +105,76 @@ namespace FormComedia
             }
 
         }
+
+      
+
+        private void buttonExport_Click(object sender, EventArgs e)
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//ComediaNotes.json";
+
+            ISession session = SQLiteSessionManager.GetCurrentSession();
+            {
+
+                using (session.BeginTransaction())
+                {
+                    var resnotes = session.CreateCriteria(typeof(Note))
+                            .List<Note>();
+
+                    using (StreamWriter sw = new StreamWriter(path))
+                    {
+                        foreach (var note in resnotes)
+                        {
+                            string x = JsonConvert.SerializeObject(note, new JsonSerializerSettings()
+                            {
+                                ContractResolver = new NHibernateContractResolver()
+                            });
+
+                            sw.WriteLine(x);
+                        }
+
+                    }
+
+                }
+            }
+        }
+
+        private void buttonImport_Click(object sender, EventArgs e)
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "//ComediaNotes.json";
+            /*
+            var notes = new NoteList { };
+            using (StreamReader sr = new StreamReader(path))
+            {
+            
+                    while (sr.Peek() >= 0)
+                    {
+                        var jsonString = sr.ReadLine();
+                        var resnote = JsonConvert.DeserializeObject<Note>(jsonString);
+                        notes.add(resnote);
+                    }
+
+                    
+                }
+                */
+            var jsonString = File.ReadAllText(path);
+            var dataTable = xxxhelper<Note>.ConvertJSONToDataTable(jsonString);
+           // DataTable dataTable = (DataTable)JsonConvert.DeserializeObject(jsonString, (typeof(DataTable)));
+            dataGridView1.DataSource = dataTable;
+            //dataGridView1.DataSource = notes.Notes;
+        }
+        
     }
 
-    
+    public class NoteList
+    {
+        public List<Note> Notes { get; set; }
+        public void add(Note note)
+        {
+        Notes.Add(note);
+        }
+        public NoteList()
+        {
+            Notes = new List<Note>();
+        }
+    }
 }

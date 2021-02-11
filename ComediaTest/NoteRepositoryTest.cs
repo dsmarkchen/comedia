@@ -165,9 +165,7 @@ namespace ComediaTest
             inferno.AddCanto(canto1);
 
             Note note = new Note
-            {
-                Name = "midway",
-                Alias = "Halfway",
+            {                
                 Commentary = "Life span is 70 years, at the midpoint is 1300 CE, Dante was 35 years old."
             };
             note.Loc = new Loc
