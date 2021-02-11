@@ -34,6 +34,8 @@
             this.initToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buildToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.importToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.commandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.summeryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,8 +75,6 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelResult = new System.Windows.Forms.ToolStripStatusLabel();
-            this.exportToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.importToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -115,23 +115,37 @@
             // initToolStripMenuItem
             // 
             this.initToolStripMenuItem.Name = "initToolStripMenuItem";
-            this.initToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.initToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
             this.initToolStripMenuItem.Text = "Init";
             this.initToolStripMenuItem.Click += new System.EventHandler(this.initToolStripMenuItem_Click);
             // 
             // addToolStripMenuItem
             // 
             this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
             this.addToolStripMenuItem.Text = "Add";
             this.addToolStripMenuItem.Click += new System.EventHandler(this.addToolStripMenuItem_Click);
             // 
             // buildToolStripMenuItem
             // 
             this.buildToolStripMenuItem.Name = "buildToolStripMenuItem";
-            this.buildToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.buildToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
             this.buildToolStripMenuItem.Text = "Build";
             this.buildToolStripMenuItem.Click += new System.EventHandler(this.buildToolStripMenuItem_Click);
+            // 
+            // exportToolStripMenuItem1
+            // 
+            this.exportToolStripMenuItem1.Name = "exportToolStripMenuItem1";
+            this.exportToolStripMenuItem1.Size = new System.Drawing.Size(110, 22);
+            this.exportToolStripMenuItem1.Text = "Export";
+            this.exportToolStripMenuItem1.Click += new System.EventHandler(this.exportToolStripMenuItem1_Click);
+            // 
+            // importToolStripMenuItem1
+            // 
+            this.importToolStripMenuItem1.Name = "importToolStripMenuItem1";
+            this.importToolStripMenuItem1.Size = new System.Drawing.Size(110, 22);
+            this.importToolStripMenuItem1.Text = "Import";
+            this.importToolStripMenuItem1.Click += new System.EventHandler(this.importToolStripMenuItem1_Click);
             // 
             // commandToolStripMenuItem
             // 
@@ -374,19 +388,20 @@
             // tableLayoutPanelNotesContainer
             // 
             this.tableLayoutPanelNotesContainer.ColumnCount = 1;
-            this.tableLayoutPanelNotesContainer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanelNotesContainer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelNotesContainer.Controls.Add(this.flowLayoutPanelNotes, 0, 0);
             this.tableLayoutPanelNotesContainer.Controls.Add(this.textBoxNoteInfo, 0, 1);
             this.tableLayoutPanelNotesContainer.Location = new System.Drawing.Point(3, 17);
             this.tableLayoutPanelNotesContainer.Name = "tableLayoutPanelNotesContainer";
             this.tableLayoutPanelNotesContainer.RowCount = 2;
-            this.tableLayoutPanelNotesContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanelNotesContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanelNotesContainer.Size = new System.Drawing.Size(142, 100);
+            this.tableLayoutPanelNotesContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
+            this.tableLayoutPanelNotesContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelNotesContainer.Size = new System.Drawing.Size(157, 146);
             this.tableLayoutPanelNotesContainer.TabIndex = 11;
             // 
             // flowLayoutPanelNotes
             // 
+            this.flowLayoutPanelNotes.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.flowLayoutPanelNotes.Location = new System.Drawing.Point(3, 3);
             this.flowLayoutPanelNotes.Name = "flowLayoutPanelNotes";
             this.flowLayoutPanelNotes.Size = new System.Drawing.Size(136, 44);
@@ -394,9 +409,10 @@
             // 
             // textBoxNoteInfo
             // 
-            this.textBoxNoteInfo.Location = new System.Drawing.Point(3, 53);
+            this.textBoxNoteInfo.Location = new System.Drawing.Point(3, 73);
             this.textBoxNoteInfo.Multiline = true;
             this.textBoxNoteInfo.Name = "textBoxNoteInfo";
+            this.textBoxNoteInfo.ReadOnly = true;
             this.textBoxNoteInfo.Size = new System.Drawing.Size(136, 44);
             this.textBoxNoteInfo.TabIndex = 1;
             // 
@@ -506,20 +522,6 @@
             // 
             this.toolStripStatusLabelResult.Name = "toolStripStatusLabelResult";
             this.toolStripStatusLabelResult.Size = new System.Drawing.Size(0, 17);
-            // 
-            // exportToolStripMenuItem1
-            // 
-            this.exportToolStripMenuItem1.Name = "exportToolStripMenuItem1";
-            this.exportToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
-            this.exportToolStripMenuItem1.Text = "Export";
-            this.exportToolStripMenuItem1.Click += new System.EventHandler(this.exportToolStripMenuItem1_Click);
-            // 
-            // importToolStripMenuItem1
-            // 
-            this.importToolStripMenuItem1.Name = "importToolStripMenuItem1";
-            this.importToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
-            this.importToolStripMenuItem1.Text = "Import";
-            this.importToolStripMenuItem1.Click += new System.EventHandler(this.importToolStripMenuItem1_Click);
             // 
             // Form1
             // 

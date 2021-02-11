@@ -302,11 +302,15 @@ namespace FormComedia
             DBUtil<Note> dBUtil = new DBUtil<Note>();
             try
             {
+                flowLayoutPanelNotes.Controls.Clear();
+                textBoxNoteInfo.Text = "";
+
+
                 var notes = dBUtil.GetAllWithRestrictionsLoc("Loc.Book", "Loc.Canto", "Loc.Start", "Loc.End", 
                     book, canto, begin, end);
                 if (notes == null) return;
 
-                flowLayoutPanelNotes.Controls.Clear();
+                
                 foreach (var note in notes)
                 {
                     Button btn = new Button

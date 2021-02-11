@@ -59,13 +59,101 @@ namespace FormComedia
             };
             if (checkBoxTerm.Checked == true)
             {
+                
                 var terms = _dBUtilTerm.GetAllWithOrRestrictionsStringInsentiveLike("Name", name, "Alias");
                 if (terms == null || terms.Count == 0)
                 {
+
+                    var itemType = (string)comboBoxTermItemType.SelectedItem;
                     var term = new Term
                     {
                         Name = name
                     };
+                    if (!string.IsNullOrEmpty(itemType))
+                    {
+                        if(itemType == "Item")
+                        {
+                            itemType = "Metaphor";
+                        };
+                        term.SetMetaphorItem(itemType, "");
+
+                        switch(itemType)
+                        {
+                            case "Place":
+                                {
+                                    var placeUtil = new DBUtil<Place>();
+                                    var places = placeUtil.GetAllWithOrRestrictionsStringInsentiveLike("Name", name, "Alias");
+                                    if (places == null || places.Count == 0)
+                                    {
+                                        var place = new Place
+                                        {
+                                            Name = name
+                                        };
+                                        placeUtil.save(place);
+                                    }
+                                }
+                                break;
+                            case "Politician":
+                                {
+                                    var placeUtil = new DBUtil<Politician>();
+                                    var places = placeUtil.GetAllWithOrRestrictionsStringInsentiveLike("Name", name, "Alias");
+                                    if (places == null || places.Count == 0)
+                                    {
+                                        var place = new Politician
+                                        {
+                                            Name = name
+                                        };
+                                        placeUtil.save(place);
+                                    }
+                                }
+                                break;
+
+                            case "Poet":
+                                {
+                                    var placeUtil = new DBUtil<Poet>();
+                                    var places = placeUtil.GetAllWithOrRestrictionsStringInsentiveLike("Name", name, "Alias");
+                                    if (places == null || places.Count == 0)
+                                    {
+                                        var place = new Poet
+                                        {
+                                            Name = name
+                                        };
+                                        placeUtil.save(place);
+                                    }
+                                }
+                                break;
+
+                            case "Character":
+                                {
+                                    var placeUtil = new DBUtil<Character>();
+                                    var places = placeUtil.GetAllWithOrRestrictionsStringInsentiveLike("Name", name, "Alias");
+                                    if (places == null || places.Count == 0)
+                                    {
+                                        var place = new Character
+                                        {
+                                            Name = name
+                                        };
+                                        placeUtil.save(place);
+                                    }
+                                }
+                                break;
+
+                            case "Person":
+                                {
+                                    var personUtil = new DBUtil<Person>();
+                                    var people = personUtil.GetAllWithOrRestrictionsStringInsentiveLike("Name", name, "Alias");
+                                    if (people == null || people.Count == 0)
+                                    {
+                                        var person = new Person
+                                        {
+                                            Name = name
+                                        };
+                                        personUtil.save(person);
+                                    }
+                                }
+                                break;
+                        }
+                    }
                     term.AddNote(note);
                     _dBUtilTerm.save(term);
                 }
@@ -77,6 +165,11 @@ namespace FormComedia
                 }
             }
             _dBUtilNote.save(note);
+        }
+
+        private void FormNoteAdd_Load(object sender, EventArgs e)
+        {
+            tableLayoutPanel2.Dock = DockStyle.Fill;
         }
     }
 }
