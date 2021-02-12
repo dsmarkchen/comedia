@@ -44,9 +44,11 @@
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.comboBoxTermItemType = new System.Windows.Forms.ComboBox();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBoxName
@@ -201,8 +203,7 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.comboBoxTermItemType);
-            this.panel1.Controls.Add(this.checkBoxTerm);
+            this.panel1.Controls.Add(this.tableLayoutPanel3);
             this.panel1.Location = new System.Drawing.Point(3, 297);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(162, 29);
@@ -210,6 +211,8 @@
             // 
             // comboBoxTermItemType
             // 
+            this.comboBoxTermItemType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxTermItemType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxTermItemType.FormattingEnabled = true;
             this.comboBoxTermItemType.Items.AddRange(new object[] {
             "Item",
@@ -219,10 +222,25 @@
             "Character",
             "Politician",
             "Poem"});
-            this.comboBoxTermItemType.Location = new System.Drawing.Point(75, 0);
+            this.comboBoxTermItemType.Location = new System.Drawing.Point(75, 3);
             this.comboBoxTermItemType.Name = "comboBoxTermItemType";
             this.comboBoxTermItemType.Size = new System.Drawing.Size(84, 21);
             this.comboBoxTermItemType.TabIndex = 9;
+            // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.ColumnCount = 2;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Controls.Add(this.checkBoxTerm, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.comboBoxTermItemType, 1, 0);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 1;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(162, 29);
+            this.tableLayoutPanel3.TabIndex = 11;
             // 
             // FormNoteAdd
             // 
@@ -238,7 +256,8 @@
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -261,5 +280,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ComboBox comboBoxTermItemType;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
     }
 }

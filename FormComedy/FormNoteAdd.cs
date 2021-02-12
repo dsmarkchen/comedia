@@ -27,6 +27,12 @@ namespace FormComedia
             textBoxStart.Text = start.ToString();
             textBoxEnd.Text = end.ToString();
         }
+        public void ResetNote()
+        {
+            textBoxCommentary.Text = "";
+            comboBoxTermItemType.SelectedItem = "Item";
+            checkBoxTerm.Checked = true;
+        }
 
         public FormNoteAdd()
         {

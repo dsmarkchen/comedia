@@ -235,9 +235,9 @@ namespace FormComedia
                 ComediaBuilder.build_politician();
                 ComediaBuilder.build_characters_comedy();
 
-                ComediaBuilder.build_terms();
-                ComediaBuilder.build_metaphors_inferno();
-                ComediaBuilder.build_notes();
+                //ComediaBuilder.build_terms();
+                //ComediaBuilder.build_metaphors_inferno();
+                //ComediaBuilder.build_notes();
             }
             catch(Exception ex)
             {
@@ -271,6 +271,7 @@ namespace FormComedia
                         var pos = start + linenum - modnum;
                         formNoteAdd.SetNoteName(text);
                         formNoteAdd.SetLocStartEnd(booknum, cantonum, pos, pos);
+                        formNoteAdd.ResetNote();
                     }
                 }
             }
