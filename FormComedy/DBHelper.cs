@@ -44,10 +44,7 @@ namespace FormComedia
         {
             ISession session = SQLiteSessionManager.GetCurrentSession();
             var runs = session.CreateCriteria(typeof(T)).List<T>();
-            if (runs.Count > 0)
-                return runs;
-
-            return null;
+            return runs;
         }
         public IList<T> GetAllWithRestrictionsLoc(string bookName, string cantoName, string beginName, string endName, string book, int canto, int begin, int end)
         {
@@ -59,25 +56,31 @@ namespace FormComedia
                         Restrictions.Ge(beginName, begin)))
                 .List<T>();
 
-            if (runs.Count > 0)
-                return runs;
-
-            return null;
+            return runs;
         }
 
 
-        public IList<T> GetAllWithOrRestrictionsStringInsentiveLike(string name, object value, string name2)
+        public IList<T> GetAllWithOrRestrictionsStringInsentiveLike(string name, object value, string name2 = "")
         {
             ISession session = SQLiteSessionManager.GetCurrentSession();
-            var runs = session.CreateCriteria(typeof(T))
-                .Add(Restrictions.Or(
-                    Restrictions.InsensitiveLike(name, (string)value, MatchMode.Anywhere),
-                    Restrictions.InsensitiveLike(name2, (string)value, MatchMode.Anywhere)))
-                .List<T>();
-            if (runs.Count > 0)
-                return runs;
+            if (string.IsNullOrEmpty(name2))
+            {
+                var runs = session.CreateCriteria(typeof(T))
+                    .Add(Restrictions.InsensitiveLike(name, (string)value, MatchMode.Anywhere))                        
+                    .List<T>();
 
-            return null;
+                return runs;
+            }
+            else
+            {
+                var runs = session.CreateCriteria(typeof(T))
+                    .Add(Restrictions.Or(
+                        Restrictions.InsensitiveLike(name, (string)value, MatchMode.Anywhere),
+                        Restrictions.InsensitiveLike(name2, (string)value, MatchMode.Anywhere)))
+                    .List<T>();
+
+                return runs;
+            }
         }
     }
     public class DBHelper

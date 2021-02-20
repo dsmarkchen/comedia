@@ -17,7 +17,7 @@ namespace FormComedia
         public static void build_poets_elite_six()
         {
             string poet_str = "Dante,          Virgil,      Homer,   Horace,        Ovid,          Lucan";
-            string born_str = "Florence,      Mantuan,   Venusia,    Sumona,            ,               ";
+            string born_str = "Florence,      Mantua,   Venusia,    Sumona,            ,               ";
             string dead_str = "Ravenna,              ,      Rome,          ,        Rome,               ";
             string write_str ="Divine Comedy,  Aeneid,     Iliad,          , The Metamorphoses, Pharsalia";
 

@@ -281,11 +281,37 @@ namespace FormComedia
         {
             StringBuilder sb = new StringBuilder();
             var key_word = textBoxKey.Text;
+            if (string.IsNullOrEmpty(key_word))
+                return;
+
             DBUtil<Note> dBUtil = new DBUtil<Note>();
-            var notes = dBUtil.GetAll();
-            foreach(var note in notes)
-            {                
-                sb.AppendLine(note.Commentary);
+            var notes = dBUtil.GetAllWithOrRestrictionsStringInsentiveLike("Name", key_word);
+            if (notes.Count > 0)
+            {
+                foreach (var note in notes)
+                {
+                    sb.AppendLine(note.ToString());
+                }
+
+            }
+            DBUtil<Person> dBUtilPerson = new DBUtil<Person>();
+            var people = dBUtilPerson.GetAllWithOrRestrictionsStringInsentiveLike("Name", key_word);
+            if (people.Count > 0)
+            {
+                foreach (var person in people)
+                {
+                    sb.AppendLine(person.ToString());
+                }
+            }
+
+            DBUtil<Place> dBUtilPlace = new DBUtil<Place>();
+            var places = dBUtilPlace.GetAllWithOrRestrictionsStringInsentiveLike("Name", key_word);
+            if (places.Count > 0)
+            {
+                foreach (var place in places)
+                {
+                    sb.AppendLine(place.ToString());
+                }
             }
             textBox3.Text = sb.ToString();
 
