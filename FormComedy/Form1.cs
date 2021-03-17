@@ -47,9 +47,21 @@ namespace FormComedia
         private void addToolStripMenuItem_Click(object sender, EventArgs e)
         {
             bool res = true;
-            string file = Path.Combine(AssemblyDirectory, "inferno.txt");
-            string purgatorio = Path.Combine(AssemblyDirectory, "purgatorio.txt");
-            string paradiso = Path.Combine(AssemblyDirectory, "paradiso.txt");
+            string file, purgatorio, paradiso;
+            if (Properties.Settings.Default.Eselon)
+            {
+                const string EselonPath = "d:/eselon";
+                file = Path.Combine(EselonPath, "inferno.txt");
+                purgatorio = Path.Combine(EselonPath, "purgatorio.txt");
+                paradiso = Path.Combine(EselonPath, "paradiso.txt");
+
+            }
+            else
+            {
+                file = Path.Combine(AssemblyDirectory, "inferno.txt");
+                purgatorio = Path.Combine(AssemblyDirectory, "purgatorio.txt");
+                paradiso = Path.Combine(AssemblyDirectory, "paradiso.txt");
+            }
 
             try
             {
